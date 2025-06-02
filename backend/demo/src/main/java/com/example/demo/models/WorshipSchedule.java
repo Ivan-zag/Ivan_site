@@ -1,3 +1,5 @@
+package com.example.demo.models;
+
 import java.time.LocalDateTime;
 
 public class WorshipSchedule {
@@ -37,7 +39,7 @@ public class WorshipSchedule {
 
     // Сеттер для content
     public void setContent(String content) {
-       if (content == null || content.isEmpty()) {
+        if (content == null || content.isEmpty()) {
             throw new IllegalArgumentException("Пожалуйста заполните контент");
         }
         this.content = content;
