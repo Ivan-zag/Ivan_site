@@ -53,7 +53,7 @@ body {
     z-index: 1001; /* Убедитесь, что он выше .overlay-container */
 }
 .page {
-    background-image: url('images/pencil2.png'), url('images/pencil1.png');
+    background-image: url('../images/pencil2.png'), url('../images/pencil1.png');
     background-position: left center, right center; /* Позиционируем изображения по бокам */
     background-repeat: no-repeat; /* Избегаем повторения изображений */     
     height: 100vh;    

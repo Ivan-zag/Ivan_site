@@ -1,0 +1,15 @@
+ @media (max-width: 768px) {
+    .container .row {
+        display: flex;
+        flex-direction: column; /* Переключаем на вертикальный флексбокс */
+    }    
+    .container .row > .col-md-6 {
+        order: 2; /* Устанавливаем для основного контента третий порядок */
+    }
+    .container .row > .col-md-3:last-child {
+        order: 1; /* Устанавливаем для боковой панели первый порядок */
+    }
+    .container .row > .col-md-3{
+        order: 3;
+    }
+}
