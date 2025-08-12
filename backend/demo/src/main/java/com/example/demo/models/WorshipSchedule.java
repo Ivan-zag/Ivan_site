@@ -1,30 +1,39 @@
 package com.example.demo.models;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
 public class WorshipSchedule {
-    private Long id; // Первичный ключ
-    private String title; // Название расписания
-    private String content; // HTML-контент расписания
-    private LocalDateTime createdAt; // Дата создания
-    private LocalDateTime updatedAt; // Дата обновления
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    // Геттер для id
+    private String title;
+
+    @Lob // Для содержания большого HTML
+    private String content;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public WorshipSchedule() {
+        // Для JPA обязательно нужен конструктор без параметров
+    }
+
+    // геттеры и сеттеры — ваши, можно оставить с валидацией
     public Long getId() {
         return id;
     }
 
-    // Сеттер для id
     public void setId(Long id) {
         this.id = id;
     }
 
-    // Геттер для title
     public String getTitle() {
         return title;
     }
 
-    // Сеттер для title с валидацией
     public void setTitle(String title) {
         if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Название расписания не может быть пустым");
@@ -32,12 +41,10 @@ public class WorshipSchedule {
         this.title = title;
     }
 
-    // Геттер для content
     public String getContent() {
         return content;
     }
 
-    // Сеттер для content
     public void setContent(String content) {
         if (content == null || content.isEmpty()) {
             throw new IllegalArgumentException("Пожалуйста заполните контент");
@@ -45,21 +52,38 @@ public class WorshipSchedule {
         this.content = content;
     }
 
-    // Геттер для createdAt
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    // Геттер для updatedAt
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    // Метод для обновления времени
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    // Метод для обновления времени (можно убрать — рекомендуется использовать
+    // @PrePersist и @PreUpdate)
     public void updateTimestamps() {
         this.updatedAt = LocalDateTime.now();
         if (createdAt == null) {
             createdAt = updatedAt;
         }
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

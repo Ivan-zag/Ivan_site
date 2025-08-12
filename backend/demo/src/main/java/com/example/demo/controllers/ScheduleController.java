@@ -1,47 +1,56 @@
 package com.example.demo.controllers;
 
+import com.example.demo.models.WorshipSchedule;
+import com.example.demo.services.WorshipScheduleService;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/schedule")
 public class ScheduleController {
 
+    @Autowired
+    private WorshipScheduleService service;
+
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadSchedule(
-        @RequestParam("file") MultipartFile file  // Принимаем Word-файл
-    ) {
-        // Логика конвертации в HTML через Apache POI
-        // Сохранение в БД
-        return ResponseEntity.ok("File uploaded and processed");
+    public ResponseEntity<?> uploadSchedule(@RequestParam("file") MultipartFile file,
+            @RequestParam("title") String title) {
+        try {
+            InputStream docStream = new ByteArrayInputStream(file.getBytes());
+            XWPFDocument doc = new XWPFDocument(docStream);
+            // Здесь должна быть ваша логика конвертации doc -> HTML
+            String htmlContent = "..."; // TODO: реализуйте
+            WorshipSchedule schedule = service.saveSchedule(title, htmlContent);
+            return ResponseEntity.ok(schedule);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Ошибка загрузки Word-файла");
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getSchedule(
-        @PathVariable String id  // Динамический ID из URL
-    ) {
-        // Получение HTML из БД по ID
-        String htmlContent = "<html>Расписание</html>";
-        return ResponseEntity.ok()
-            .header("Content-Type", "text/html")
-            .body(htmlContent);
+    public ResponseEntity<?> getSchedule(@PathVariable Long id) {
+        Optional<WorshipSchedule> schedule = service.getScheduleById(id);
+        return schedule.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateSchedule(
-        @PathVariable String id,
-        @RequestBody String htmlContent  // Новое HTML-содержимое
-    ) {
-        // Обновление контента в БД
-        return ResponseEntity.ok("Schedule updated");
+    public ResponseEntity<?> editSchedule(@PathVariable Long id, @RequestBody WorshipSchedule updated) {
+        Optional<WorshipSchedule> schedule = service.updateSchedule(id, updated.getContent());
+        return schedule.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSchedule(
-        @PathVariable String id
-    ) {
-        // Удаление записи из БД
-        return ResponseEntity.ok("Schedule deleted");
+    public ResponseEntity<?> deleteSchedule(@PathVariable Long id) {
+        service.deleteSchedule(id);
+        return ResponseEntity.ok().build();
     }
 }
