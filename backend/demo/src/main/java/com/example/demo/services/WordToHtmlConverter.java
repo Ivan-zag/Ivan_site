@@ -13,7 +13,7 @@ public class WordToHtmlConverter {
 
     public String convertDocxToHtml(byte[] docxBytes) throws Exception {
         try (XWPFDocument document = new XWPFDocument(new ByteArrayInputStream(docxBytes))) {
-            XHTMLOptions options = XHTMLOptions.create().indent(2);
+            XHTMLOptions options = XHTMLOptions.create();
             try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
                 XHTMLConverter.getInstance().convert(document, out, options);
                 return out.toString("UTF-8");

@@ -25,9 +25,32 @@ public class ScheduleController {
         try {
             InputStream docStream = new ByteArrayInputStream(file.getBytes());
             XWPFDocument doc = new XWPFDocument(docStream);
-            // Здесь должна быть ваша логика конвертации doc -> HTML
-            String htmlContent = "..."; // TODO: реализуйте
-            WorshipSchedule schedule = service.saveSchedule(title, htmlContent);
+
+            StringBuilder htmlContent = new StringBuilder("<html><body>");
+            // Преобразуем каждый абзац в <p>
+            doc.getParagraphs().forEach(paragraph -> {
+                String text = paragraph.getText();
+                if (text != null && !text.isEmpty()) {
+                    htmlContent.append("<p>").append(text).append("</p>");
+                }
+            });
+
+            // Можно также добавить обработку таблиц (по желанию)
+            doc.getTables().forEach(table -> {
+                htmlContent.append("<table border=\"1\">");
+                table.getRows().forEach(row -> {
+                    htmlContent.append("<tr>");
+                    row.getTableCells().forEach(cell -> {
+                        htmlContent.append("<td>").append(cell.getText()).append("</td>");
+                    });
+                    htmlContent.append("</tr>");
+                });
+                htmlContent.append("</table>");
+            });
+
+            htmlContent.append("</body></html>");
+
+            WorshipSchedule schedule = service.saveSchedule(title, htmlContent.toString());
             return ResponseEntity.ok(schedule);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Ошибка загрузки Word-файла");
