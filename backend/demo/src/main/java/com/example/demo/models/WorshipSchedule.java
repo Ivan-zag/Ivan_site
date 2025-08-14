@@ -1,6 +1,5 @@
 package com.example.demo.models;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,19 +8,21 @@ public class WorshipSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String day;
+    private String time;
+    private String service; // Богослужение
 
-    @Lob // Для содержания большого HTML
-    private String content;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    // Getters and setters
 
     public WorshipSchedule() {
-        // Для JPA обязательно нужен конструктор без параметров
     }
 
-    // геттеры и сеттеры — ваши, можно оставить с валидацией
+    public WorshipSchedule(String day, String time, String service) {
+        this.day = day;
+        this.time = time;
+        this.service = service;
+    }
+
     public Long getId() {
         return id;
     }
@@ -30,60 +31,27 @@ public class WorshipSchedule {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getDay() {
+        return day;
     }
 
-    public void setTitle(String title) {
-        if (title == null || title.isEmpty()) {
-            throw new IllegalArgumentException("Название расписания не может быть пустым");
-        }
-        this.title = title;
+    public void setDay(String day) {
+        this.day = day;
     }
 
-    public String getContent() {
-        return content;
+    public String getTime() {
+        return time;
     }
 
-    public void setContent(String content) {
-        if (content == null || content.isEmpty()) {
-            throw new IllegalArgumentException("Пожалуйста заполните контент");
-        }
-        this.content = content;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getService() {
+        return service;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    // Метод для обновления времени (можно убрать — рекомендуется использовать
-    // @PrePersist и @PreUpdate)
-    public void updateTimestamps() {
-        this.updatedAt = LocalDateTime.now();
-        if (createdAt == null) {
-            createdAt = updatedAt;
-        }
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    public void setService(String service) {
+        this.service = service;
     }
 }
