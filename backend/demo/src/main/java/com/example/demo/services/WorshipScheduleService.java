@@ -4,7 +4,7 @@ import com.example.demo.models.WorshipSchedule;
 import com.example.demo.repositories.WorshipScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Sort;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -25,6 +25,10 @@ public class WorshipScheduleService {
 
     public Optional<WorshipSchedule> getScheduleById(Long id) {
         return repository.findById(id);
+    }
+
+    public Optional<WorshipSchedule> getLastSchedule() {
+        return repository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream().findFirst();
     }
 
     public Optional<WorshipSchedule> updateSchedule(Long id, String newContent) {

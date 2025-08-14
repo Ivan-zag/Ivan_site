@@ -68,6 +68,13 @@ public class ScheduleController {
         }
     }
 
+    @GetMapping("/last")
+    public ResponseEntity<?> getLastSchedule() {
+        Optional<WorshipSchedule> lastSchedule = service.getLastSchedule();
+        return lastSchedule.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getSchedule(@PathVariable Long id) {
         Optional<WorshipSchedule> schedule = service.getScheduleById(id);
