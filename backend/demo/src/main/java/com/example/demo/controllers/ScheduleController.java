@@ -19,38 +19,49 @@ public class ScheduleController {
     @Autowired
     private WorshipScheduleService service;
 
+    // Под вопросом? Нужен ли вообще html, когда можно тянуть с базы.
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadSchedule(@RequestParam("file") MultipartFile file,
-            @RequestParam("title") String title) {
+    public ResponseEntity<?> uploadSchedule(@RequestParam("file") MultipartFile file) {
         try {
             InputStream docStream = new ByteArrayInputStream(file.getBytes());
             XWPFDocument doc = new XWPFDocument(docStream);
 
-            StringBuilder htmlContent = new StringBuilder("<html><body>");
-            // Преобразуем каждый абзац в <p>
-            doc.getParagraphs().forEach(paragraph -> {
-                String text = paragraph.getText();
-                if (text != null && !text.isEmpty()) {
-                    htmlContent.append("<p>").append(text).append("</p>");
+            StringBuilder htmlContent = new StringBuilder();
+
+            // Заголовок как во фронт-версии с Bootstrap-классами
+            htmlContent.append("<h2 class=\"text-center fw-bold fs-2 mb-5 mt-4\">Расписание Богослужений</h2>");
+            htmlContent.append("<div class=\"table-responsive\">");
+
+            // Обработка только первой таблицы Word (если их несколько)
+            if (!doc.getTables().isEmpty()) {
+                var table = doc.getTables().get(0);
+                htmlContent.append("<table class=\"table table-bordered\">");
+                boolean theadDone = false;
+                for (int i = 0; i < table.getNumberOfRows(); i++) {
+                    var row = table.getRow(i);
+                    // Шапка
+                    if (i == 0 && !theadDone) {
+                        htmlContent.append("<thead><tr>");
+                        row.getTableCells()
+                                .forEach(cell -> htmlContent.append("<th>").append(cell.getText()).append("</th>"));
+                        htmlContent.append("</tr></thead><tbody>");
+                        theadDone = true;
+                    } else {
+                        htmlContent.append("<tr>");
+                        row.getTableCells()
+                                .forEach(cell -> htmlContent.append("<td>").append(cell.getText()).append("</td>"));
+                        htmlContent.append("</tr>");
+                    }
                 }
-            });
+                htmlContent.append("</tbody></table>");
+            } else {
+                // если таблица отсутствует, можно что-то другое выводить или оставить пустым
+                htmlContent.append("<div class=\"alert alert-warning\">Нет данных для отображения</div>");
+            }
+            htmlContent.append("</div>");
 
-            // Можно также добавить обработку таблиц (по желанию)
-            doc.getTables().forEach(table -> {
-                htmlContent.append("<table border=\"1\">");
-                table.getRows().forEach(row -> {
-                    htmlContent.append("<tr>");
-                    row.getTableCells().forEach(cell -> {
-                        htmlContent.append("<td>").append(cell.getText()).append("</td>");
-                    });
-                    htmlContent.append("</tr>");
-                });
-                htmlContent.append("</table>");
-            });
-
-            htmlContent.append("</body></html>");
-
-            WorshipSchedule schedule = service.saveSchedule(title, htmlContent.toString());
+            // Сохраняем как обычно, htmlContent.toString() — ваш HTML для фронта
+            WorshipSchedule schedule = service.saveSchedule("Расписание Богослужений", htmlContent.toString());
             return ResponseEntity.ok(schedule);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Ошибка загрузки Word-файла");
