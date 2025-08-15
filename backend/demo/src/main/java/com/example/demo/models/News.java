@@ -1,10 +1,15 @@
 package com.example.demo.models;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
 public class News {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String content;
     private String imageUrl;
     private boolean isActive;
