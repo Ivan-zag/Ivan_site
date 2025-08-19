@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  schedule-app:
+    build: .
+    image: schedule-app
+    container_name: schedule-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - db-data:/app/database
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/database/schedule.db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
+    driver: local
+
+

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.models.User;
 import com.example.demo.models.WorshipSchedule;
 import com.example.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
