@@ -12,15 +12,31 @@
 body {        
     font-family: 'Cinzel', serif;  
 }
-.header {    
-            font-family: 'Cinzel', serif; /* Применяем шрифт Cardo */
-            background-color: #83acd4; /* Цвет фона */
-            background-image: url('path/to/your/pattern.png'); /* Путь к изображению узора */
-            background-size: cover; /* Масштабирование изображения */
-            color: #FFF5E1; /* Цвет текста */            
-            padding: 20px 20px; /* Отступы сверху и снизу */
-            position: relative; /* Для позиционирования */
-        }
+.header {
+    font-family: 'Cinzel', serif;
+    background-color: #83acd4; /* Основной цвет фона */
+    background-image: url('../images/ornament.svg'); /* Путь к файлу узора */
+    background-size: 50px 50px; /* Размер повторяющегося узора */
+    background-repeat: repeat; /* Повторяем узор по всей области */
+    
+    /* Настройка прозрачности только для фонового изображения */
+    mix-blend-mode: soft-light; /* Режим наложения для мягкости */
+    -webkit-background-filter: saturate(50%) blur(0.5px); /* Для Safari */
+    background-filter: saturate(50%) blur(0.5px); /* Эффект размытия */
+    
+    /* Прозрачность через blend-mode */
+    background-blend-mode: soft-light;
+    
+    color: #FFF5E1;
+    padding: 20px 20px;
+    position: relative;
+    
+    /* Дополнительные настройки для совместимости */
+    -webkit-background-size: 50px 50px;
+    -moz-background-size: 50px 50px;
+    -o-background-size: 50px 50px;
+}
+
 .header h1 {
             margin: 0; /* Убираем отступы у заголовка */
             font-size: 2.5rem; /* Размер шрифта */
