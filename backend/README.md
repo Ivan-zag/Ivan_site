@@ -96,7 +96,7 @@
 
 ---
 
-## База данных (PostgreSQL)
+## База данных (SQLlite)
 ```sql
 CREATE TABLE worship_schedule (
     id SERIAL PRIMARY KEY,
