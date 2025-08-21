@@ -12,7 +12,7 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String content;
     private String imageUrl;
-    private boolean isActive;
+    private boolean active;
     private LocalDateTime createdAt;
 
     // getters и setters
@@ -49,11 +49,11 @@ public class News {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     public LocalDateTime getCreatedAt() {
