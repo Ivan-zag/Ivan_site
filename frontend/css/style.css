@@ -15,8 +15,6 @@ body {
 
 .header {
     font-family: 'Cinzel', serif;
-    display: flex;
-    justify-content: space-between; /* Разместить содержимое по краям */
     align-items: center; /* Вертикальное центрирование */
     color: #FFF5E1;
     padding: 20px 20px;
@@ -25,10 +23,7 @@ body {
 }
 
 .header h3{
-    margin: 0; /* Убираем отступы у заголовка */
     font-size: 2.5rem; /* Размер шрифта */
-    position: relative; /* По умолчанию, или можно не задавать, если не конфликтует с другими позиционированными элементами */
-    z-index: 1; /* Это поднимает изображение над фоном, если есть другие перекрывающие элементы */
 }
 
 .header-pattern {
@@ -52,9 +47,7 @@ body {
     margin-left: auto; /* Двигаем узор в правую часть */
 }
 
-.header h3 {
-            margin: 0; /* Убираем отступы у заголовка */
-        }
+
 @media (max-width: 768px) {
     .header {
         text-align: center; /* Центрирование заголовка на мобильных устройствах */
