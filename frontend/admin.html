@@ -22,8 +22,7 @@
                 <div class="card w-25 m-3 h-100 d-inline-block">
                     <ul class="list-group text-center list-group-flush">
                         <li class="list-group-item btn-outline-primary w-100" id="news-btn">Новости</li>
-                        <li class="list-group-item btn-outline-primary w-100" id="services-btn">Богослужения</li>
-                        <li class="list-group-item btn-outline-primary w-100" id="albums-btn">Фотоальбом</li>
+                        <li class="list-group-item btn-outline-primary w-100" id="services-btn">Богослужения</li>                        
                     </ul>
                 </div>
                 <div id="news-edit" class="edit-section card mb-3 mt-3 me-3 p-3 w-75 d-none">
@@ -34,16 +33,9 @@
                 </div>
                 <div id="services-edit" class="edit-section card mb-3 mt-3 me-3 p-3 w-75 d-none">
                     <h3>Редактирование Богослужения</h3>
-                    <button>Добавить богослужение</button>
-                    <button>Редактировать богослужение</button>
+                    <button>Добавить богослужение</button>                    
                     <button>Удалить богослужение</button>
-                </div>
-                <div id="albums-edit" class="edit-section card mb-3 mt-3 me-3 p-3 w-75 d-none">
-                    <h3>Редактирование Фотоальбом</h3>
-                    <button>Добавить фото</button>
-                    <button>Редактировать фото</button>
-                    <button>Удалить фото</button>
-                </div>
+                </div>                
             </div>
         </div>
     </div>   
@@ -76,6 +68,92 @@
         </div>
     </div>
 </div>
+<!-- Модальное окно для редактирования новостей -->
+<div class="modal fade" id="editNewsModal" tabindex="-1" aria-labelledby="editNewsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editNewsModalLabel">Редактировать новость</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editNewsForm">
+                    <div class="mb-3">
+                        <label for="editNewsTitle" class="form-label">Заголовок</label>
+                        <input type="text" class="form-control" id="editNewsTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editNewsContent" class="form-label">Содержимое</label>
+                        <textarea class="form-control" id="editNewsContent" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Модальное окно для удаления новостей -->
+<div class="modal fade" id="deleteNewsModal" tabindex="-1" aria-labelledby="deleteNewsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteNewsModalLabel">Удалить новость</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteNewsForm">
+                    <div class="mb-3">
+                        <label for="newsToDelete" class="form-label">Выберите новость для удаления</label>
+                        <select class="form-select" id="newsToDelete" required>
+                            <!-- Options will be filled dynamically -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Модальное окно для добавления богослужения -->
+<div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addServiceModalLabel">Добавить богослужение</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="serviceForm">
+                    <div class="mb-3">
+                        <label for="serviceFile" class="form-label">Загрузить файл богослужения (Word)</label>
+                        <input type="file" class="form-control" id="serviceFile" accept=".doc, .docx" required>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">Загрузить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Модальное окно для удаления богослужения -->
+<div class="modal fade" id="deleteServiceModal" tabindex="-1" aria-labelledby="deleteServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteServiceModalLabel">Удаление богослужения</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите удалить богослужение?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="confirmDeleteService" class="btn btn-outline-danger">Да</button>
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Нет</button>                
+            </div>
+        </div>
+    </div>
+</div>
+
+
     
     <div class="page">
         
@@ -96,30 +174,83 @@
         keyboard: false
     });
 
-     // Нажатие на кнопку "Новости"
+    $('#news-edit button:first').click(function() {
+        addNewsModal.show();
+    });
+
+    var editNewsModal = new bootstrap.Modal(document.getElementById('editNewsModal'), {
+        keyboard: false
+    });
+
+    $('#news-edit button').eq(1).click(function() {
+        editNewsModal.show();
+    });
+
+    var deleteNewsModal = new bootstrap.Modal(document.getElementById('deleteNewsModal'), {
+        keyboard: false
+    });
+
+    $('#news-edit button').eq(2).click(function() {
+        var newsData = [
+            { id: 1, title: "Первая новость" },
+            { id: 2, title: "Вторая новость" },
+            { id: 3, title: "Третья новость" }
+        ];
+
+        var $newsToDelete = $('#newsToDelete');
+        $newsToDelete.empty();
+        $.each(newsData, function(index, news) {
+            $newsToDelete.append($('<option>', {
+                value: news.id,
+                text: news.title
+            }));
+        });
+
+        deleteNewsModal.show();
+    });
+
+    var addServiceModal = new bootstrap.Modal(document.getElementById('addServiceModal'), {
+        keyboard: false
+    });
+
+    // Открытие модального окна добавления богослужения
+    $('#services-edit button:first').click(function() {
+        addServiceModal.show();
+    });
+
+    var deleteServiceModal = new bootstrap.Modal(document.getElementById('deleteServiceModal'), {
+        keyboard: false
+    });
+
+    // Открытие модального окна удаления богослужения
+    $('#services-edit button').eq(1).click(function() {
+        deleteServiceModal.show();
+    });
+
+    $('#confirmDeleteService').click(function() {
+        // Здесь можно добавить логику для удаления богослужения
+        console.log("Богослужение удалено");
+        deleteServiceModal.hide(); // Закрыть модальное окно после удаления
+    });
+
     $('#news-btn').click(function() {
         $('.edit-section').addClass('d-none');
         $('#news-edit').removeClass('d-none');
     });
 
-    // Нажатие на кнопку "Богослужения"
     $('#services-btn').click(function() {
         $('.edit-section').addClass('d-none');
         $('#services-edit').removeClass('d-none');
     });
 
-    // Нажатие на кнопку "Фотоальбом"
     $('#albums-btn').click(function() {
         $('.edit-section').addClass('d-none');
         $('#albums-edit').removeClass('d-none');
     });
 
-    // Открыть модальное окно при нажатии на "Добавить новость"
-    $('#news-edit button:first').click(function() {
-        addNewsModal.show();
-    });   
-            // Загружаем навигационное меню
-            $('#navbar-container').load('navbar.html');})
+    $('#navbar-container').load('navbar.html');
+});
+
     </script>     
     
 </body>
