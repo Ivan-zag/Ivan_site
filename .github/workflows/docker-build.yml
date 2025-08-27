@@ -42,9 +42,8 @@ jobs:
           docker pull zagaryds/backend_michail:latest
           
           # Остановить и удалить контейнер, если он уже работает
-          if [ "$(docker ps -q -f name=backend_michail)" ]; then
-              docker stop backend_michail
-              docker rm backend_michail
+          if [ "$(docker ps -q -f name=backend_michail)" ]; then              
+              docker rm -f backend_michail
           fi
 
           # Запустить новый контейнер на основе последнего образа
