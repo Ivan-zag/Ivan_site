@@ -27,7 +27,7 @@ jobs:
       with:
         context: ./backend/demo
         tags: zagaryds/backend_michail:latest
-
+        push: true
   deploy:
     runs-on: ubuntu-latest
     needs: build
