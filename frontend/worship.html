@@ -43,7 +43,7 @@
     <script>
          $(document).ready(function() {
             $.ajax({
-                url: 'https://cors-anywhere.herokuapp.com/http://81.94.150.16:8080/api/schedule/last',
+                url: 'http://81.94.150.16:8080/api/schedule/last',
                 type: 'GET',
                 success: function(data) {
                     $('#schedule').html(data.content);
