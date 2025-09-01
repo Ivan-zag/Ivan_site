@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  myapp:
+    image: zagaryds/backend_michail:latest  # Замените на имя вашего Docker image
+    container_name: backend_michail    
+    expose:
+      - "8080"  # Экспонируем порт приложения внутри сети Docker
+  nginx:
+    image: nginx:latest
+    container_name: reverse_proxy
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/ssl  # Убедитесь, что файлы сертификатов находятся в этой директории
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - myapp  # Заставляет Nginx стартовать после запуска Spring Boot приложения
+
+
+

@@ -10,14 +10,7 @@ services:
     volumes:
       - db-data:/app/database
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/database/schedule.db
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
-
+      - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/database/schedule.db   
 volumes:
   db-data:
     driver: local
