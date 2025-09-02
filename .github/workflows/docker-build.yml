@@ -47,4 +47,4 @@ jobs:
           fi
 
           # Запустить новый контейнер на основе последнего образа
-          docker run -d --name backend_michail -p 8080:8080 zagaryds/backend_michail:latest
+          docker run -d --name backend_michail -p 8080:8080 \-v db-data:/app/database \zagaryds/backend_michail:latest
