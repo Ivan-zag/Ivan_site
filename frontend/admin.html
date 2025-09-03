@@ -219,27 +219,39 @@
     });
 
     $('#serviceForm').on('submit', function(event) {
-    event.preventDefault(); // Остановка стандартного поведения формы
-    var formData = new FormData(this);
+    event.preventDefault();
     
-    console.log("Отправляемые данные:", formData);
-    $.ajax({
-        url: 'https://back.hram48plosk.ru/api/schedule/upload',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            console.log("Расписание загружено", response);
-            addServiceModal.hide(); // Закрытие модального окна после успешной загрузки
-            alert('Расписание успешно добавлено!');
-        },
-        error: function(xhr, status, error) {
-            console.error("Ошибка загрузки расписания", error);
-            alert('Ошибка при добавлении расписания!');
-        }
+    // Получаем выбранный файл из инпута
+    var fileInput = document.getElementById('serviceFile');
+    var file = fileInput.files[0];
+
+    if (file) {
+        var formData = new FormData();
+        formData.append('file', file); // Передаём файл под ключом 'file'
+
+        console.log("Отправляемый файл:", file.name);
+
+        $.ajax({
+            url: 'https://back.hram48plosk.ru/api/schedule/upload',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log("Расписание загружено", response);
+                addServiceModal.hide();
+                alert('Расписание успешно добавлено!');
+            },
+            error: function(xhr, status, error) {
+                console.error("Ошибка загрузки расписания", error);
+                alert('Ошибка при добавлении расписания!');
+            }
         });
+    } else {
+        alert('Пожалуйста, выберите файл для загрузки.');
+    }
     });
+
 
     var deleteServiceModal = new bootstrap.Modal(document.getElementById('deleteServiceModal'), {
         keyboard: false
