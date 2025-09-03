@@ -129,6 +129,7 @@
                         <input type="file" class="form-control" id="serviceFile" accept=".doc, .docx" required>
                     </div>
                     <button type="submit" class="btn btn-outline-primary">Загрузить</button>
+                    <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                 </form>
             </div>
         </div>
@@ -230,7 +231,8 @@
         formData.append('file', file); // Передаём файл под ключом 'file'
 
         console.log("Отправляемый файл:", file.name);
-
+        $('#serviceForm button').addClass('d-none');
+        $('#spinner').removeClass('d-none');
         $.ajax({
             url: 'https://back.hram48plosk.ru/api/schedule/upload',
             type: 'POST',
@@ -245,6 +247,11 @@
             error: function(xhr, status, error) {
                 console.error("Ошибка загрузки расписания", error);
                 alert('Ошибка при добавлении расписания!');
+            },
+            complete: function() {
+                // Скрываем спиннер после завершения
+                $('#spinner').addClass('d-none');
+                $('#serviceForm button').removeClass('d-none');
             }
         });
     } else {
