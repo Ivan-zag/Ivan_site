@@ -221,7 +221,8 @@
     $('#serviceForm').on('submit', function(event) {
     event.preventDefault(); // Остановка стандартного поведения формы
     var formData = new FormData(this);
-
+    
+    console.log("Отправляемые данные:", formData);
     $.ajax({
         url: 'https://back.hram48plosk.ru/api/schedule/upload',
         type: 'POST',
