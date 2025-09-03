@@ -148,7 +148,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="confirmDeleteService" class="btn btn-outline-danger">Да</button>
-                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Нет</button>                
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Нет</button>
+                <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>                
             </div>
         </div>
     </div>
@@ -270,23 +271,48 @@
     });
 
     $('#confirmDeleteService').click(function() {
-        // Получите или определите последний ID для удаления
-        var lastId = 'получите_последний_id_из_ваших_данных';
-        var deleteUrl = `https://back.hram48plosk.ru/api/api/schedule/${lastId}`;
-         $.ajax({
-            url: deleteUrl,
-            type: 'DELETE',
-            success: function(response) {
-                console.log("Богослужение удалено", response);
-                deleteServiceModal.hide();
-                alert('Расписание успешно удалено!');
+    // Сначала выполняем запрос для получения последнего ID
+    $('#deleteServiceModal button').addClass('d-none');
+    $('#spinner').removeClass('d-none');
+    $.ajax({
+        url: 'https://back.hram48plosk.ru/api/schedule/last', // API для получения последнего ID
+        type: 'GET',
+        success: function(response) {
+            if (response && response.id) { // Проверяем, есть ли поле ID
+                var lastId = response.id; // Извлекаем последний ID
+
+                var deleteUrl = `https://back.hram48plosk.ru/api/api/schedule/${lastId}`;
+                
+                // Далее выполняем запрос на удаление с последним ID
+                $.ajax({
+                    url: deleteUrl,
+                    type: 'DELETE',
+                    success: function(response) {
+                        console.log("Богослужение удалено", response);
+                        deleteServiceModal.hide();
+                        alert('Расписание успешно удалено!');
                     },
-                error: function(xhr, status, error) {
-                console.error("Ошибка удаления расписания", error);
-                alert('Ошибка при удалении расписания!');
+                    error: function(xhr, status, error) {
+                        console.error("Ошибка удаления расписания", error);
+                        alert('Ошибка при удалении расписания!');
+                    },
+                    complete: function() {
+                        // Скрываем спиннер после завершения
+                        $('#deleteServiceModal button').removeClass('d-none');
+                        $('#spinner').addClass('d-none');
                     }
                 });
-            });
+            } else {
+                alert('Не удалось получить последний ID расписания.');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Ошибка получения последнего ID", error);
+            alert('Ошибка при получении последнего ID расписания.');
+        }
+        });
+    });
+
 
     $('#news-btn').click(function() {
         $('.edit-section').addClass('d-none');
