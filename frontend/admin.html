@@ -218,6 +218,28 @@
         addServiceModal.show();
     });
 
+    $('#serviceForm').on('submit', function(event) {
+    event.preventDefault(); // Остановка стандартного поведения формы
+    var formData = new FormData(this);
+
+    $.ajax({
+        url: 'https://back.hram48plosk.ru/api/schedule/upload',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log("Расписание загружено", response);
+            addServiceModal.hide(); // Закрытие модального окна после успешной загрузки
+            alert('Расписание успешно добавлено!');
+        },
+        error: function(xhr, status, error) {
+            console.error("Ошибка загрузки расписания", error);
+            alert('Ошибка при добавлении расписания!');
+        }
+        });
+    });
+
     var deleteServiceModal = new bootstrap.Modal(document.getElementById('deleteServiceModal'), {
         keyboard: false
     });
@@ -228,10 +250,23 @@
     });
 
     $('#confirmDeleteService').click(function() {
-        // Здесь можно добавить логику для удаления богослужения
-        console.log("Богослужение удалено");
-        deleteServiceModal.hide(); // Закрыть модальное окно после удаления
-    });
+        // Получите или определите последний ID для удаления
+        var lastId = 'получите_последний_id_из_ваших_данных';
+        var deleteUrl = `https://back.hram48plosk.ru/api/api/schedule/${lastId}`;
+         $.ajax({
+            url: deleteUrl,
+            type: 'DELETE',
+            success: function(response) {
+                console.log("Богослужение удалено", response);
+                deleteServiceModal.hide();
+                alert('Расписание успешно удалено!');
+                    },
+                error: function(xhr, status, error) {
+                console.error("Ошибка удаления расписания", error);
+                alert('Ошибка при удалении расписания!');
+                    }
+                });
+            });
 
     $('#news-btn').click(function() {
         $('.edit-section').addClass('d-none');
@@ -241,12 +276,7 @@
     $('#services-btn').click(function() {
         $('.edit-section').addClass('d-none');
         $('#services-edit').removeClass('d-none');
-    });
-
-    $('#albums-btn').click(function() {
-        $('.edit-section').addClass('d-none');
-        $('#albums-edit').removeClass('d-none');
-    });
+    });    
 
     $('#navbar-container').load('navbar.html');
 });
