@@ -196,7 +196,7 @@
         success: function(response) {
             alert('Новость успешно добавлена!');
             // закрытие модального окна
-            new bootstrap.Modal(document.getElementById('addNewsModal')).hide();
+            addNewsModal.hide();
             // обновите список новостей, например, вызвав функцию fetchNews() у вас на фронте
         },
         error: function(xhr, status, error) {
