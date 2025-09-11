@@ -154,9 +154,7 @@
         </div>
     </div>
 </div>
-
-
-    
+   
     <div class="page">
         
     </div>
@@ -179,6 +177,35 @@
     $('#news-edit button:first').click(function() {
         addNewsModal.show();
     });
+
+    $('#newsForm').on('submit', function(event) {
+    event.preventDefault();
+    var formData = new FormData();
+    formData.append('title', $('#newsTitle').val());
+    formData.append('content', $('#newsContent').val());
+    var file = $('#newsImage')[0].files[0];
+    if (file) {
+        formData.append('imageUrl', file);
+    }
+    $.ajax({
+        url: 'https://back.hram48plosk.ru/api/news',  // ваш эндпоинт на бэкенде для создания новости
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            alert('Новость успешно добавлена!');
+            // закрытие модального окна
+            new bootstrap.Modal(document.getElementById('addNewsModal')).hide();
+            // обновите список новостей, например, вызвав функцию fetchNews() у вас на фронте
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+            alert('Ошибка при добавлении новости!');
+        }
+        });
+    });
+
 
     var editNewsModal = new bootstrap.Modal(document.getElementById('editNewsModal'), {
         keyboard: false

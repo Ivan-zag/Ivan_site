@@ -1,4 +1,5 @@
 package com.example.demo.controllers;
+
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -6,12 +7,12 @@ import com.example.demo.models.*;
 import com.example.demo.services.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/news")
 public class NewsController {
-    
+
     // Сервис для работы с новостями
     private final NewsService newsService;
 
@@ -20,12 +21,29 @@ public class NewsController {
     }
 
     @PostMapping
-    public ResponseEntity<NewsDto> createNews(@RequestBody NewsDto newsDto) {
+    public ResponseEntity<NewsDto> createNews(@RequestParam String title,
+            @RequestParam String content,
+            @RequestParam(required = false) MultipartFile imageUrl) {
+        NewsDto newsDto = new NewsDto();
+        newsDto.setTitle(title);
+        newsDto.setContent(content);
+
+        // Логика сохранения изображения, если оно загружено
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // Сохраните изображение и установите путь к нему в newsDto
+            String imagePath = saveImage(imageUrl);
+            newsDto.setImageUrl(imagePath);
+        }
+
         NewsDto createdNews = newsService.createNews(newsDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(createdNews);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdNews);
     }
-    
+
+    private String saveImage(MultipartFile image) {
+        // Логика сохранения файла и возврата пути к нему
+        return "imagePath";
+    }
+
     @GetMapping
     public ResponseEntity<List<NewsDto>> getActiveNews() {
         List<NewsDto> activeNews = newsService.getActiveNews();
@@ -49,4 +67,3 @@ public class NewsController {
         newsService.backupNews();
     }
 }
-
