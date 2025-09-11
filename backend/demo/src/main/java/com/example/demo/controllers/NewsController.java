@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -40,8 +42,30 @@ public class NewsController {
     }
 
     private String saveImage(MultipartFile image) {
-        // Логика сохранения файла и возврата пути к нему
-        return "imagePath";
+        // Каталог, в который будут сохранены изображения
+        String uploadDir = "/app/uploads"; // Каталог в контейнере Docker
+
+        // Убедитесь, что директория существует, и создайте её, если необходимо
+        File uploadDirectory = new File(uploadDir);
+        if (!uploadDirectory.exists()) {
+            uploadDirectory.mkdirs();
+        }
+
+        // Генерация уникального имени файла
+        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+
+        // Путь для сохранения файла
+        File destinationFile = new File(uploadDirectory, fileName);
+
+        try {
+            // Сохраняем файл
+            image.transferTo(destinationFile);
+            System.out.println("Файл сохранён: " + destinationFile.getPath());
+            return destinationFile.getPath(); // Возвращаем путь к файлу
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Не удалось сохранить файл", e);
+        }
     }
 
     @GetMapping
