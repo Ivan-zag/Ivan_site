@@ -49,7 +49,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="newsForm">
+                <form id="newsForm" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="newsTitle" class="form-label">Заголовок</label>
                         <input type="text" class="form-control" id="newsTitle" required>
@@ -60,7 +60,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="newsImage" class="form-label">Изображение</label>
-                        <input type="file" class="form-control" id="newsImage">
+                        <input type="file" name="imageUrl" class="form-control" id="newsImage">
                     </div>
                     <button type="submit" class="btn btn-outline-primary">Сохранить</button>
                 </form>
