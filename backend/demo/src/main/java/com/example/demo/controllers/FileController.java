@@ -16,7 +16,7 @@ public class FileController {
 
     @GetMapping("/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-        Path uploads = Paths.get("/uploads");
+        Path uploads = Paths.get("/app/uploads");
         Path file = uploads.resolve(filename).normalize();
         Resource resource;
         try {

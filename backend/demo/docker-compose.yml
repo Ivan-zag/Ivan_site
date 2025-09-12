@@ -8,14 +8,11 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - db-data:/app/database
-      - uploads:/uploads  # Добавляем монтирование директории для загрузки изображений
+      - db-data:/app/database      
     environment:
       - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/database/schedule.db   
 volumes:
   db-data:
-    driver: local
-  uploads:  # Определяем новый том для изображений
-    driver: local
+    driver: local  
 
 

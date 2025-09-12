@@ -43,7 +43,7 @@ public class NewsController {
 
     private String saveImage(MultipartFile image) {
         // Каталог, в который будут сохранены изображения
-        String uploadDir = "/uploads"; // Каталог
+        String uploadDir = "/app/uploads"; // Каталог
         // Убедитесь, что директория существует, и создайте её, если необходимо
         File uploadDirectory = new File(uploadDir);
         if (!uploadDirectory.exists()) {
