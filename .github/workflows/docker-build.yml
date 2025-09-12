@@ -41,15 +41,11 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
-          docker pull zagaryds/backend_michail:latest
+        script: |          
           docker-compose pull
-          docker-compose up -d
+          docker-compose down
+          docker-compose up -d         
           
-          # Остановить и удалить контейнер, если он уже работает
-          #if [ "$(docker ps -q -f name=backend_michail)" ]; then              
-           #   docker rm -f backend_michail
-          #fi
 
           # Запустить новый контейнер на основе последнего образа
-          #docker run -d --name backend_michail -p 8080:8080 \-v /var/lib/docker/volumes/db-data/_data:/app/database \zagaryds/backend_michail:latest
+          # docker run -d --name backend_michail -p 8080:8080 \-v /var/lib/docker/volumes/db-data/_data:/app/database \zagaryds/backend_michail:latest
