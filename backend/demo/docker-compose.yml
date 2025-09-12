@@ -9,7 +9,7 @@ services:
       - "8080:8080"
     volumes:
       - db-data:/app/database
-      - uploads:/app/uploads  # Добавляем монтирование директории для загрузки изображений
+      - uploads:uploads  # Добавляем монтирование директории для загрузки изображений
     environment:
       - SPRING_DATASOURCE_URL=jdbc:sqlite:/app/database/schedule.db   
 volumes:
