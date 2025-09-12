@@ -43,9 +43,8 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |          
           docker-compose pull
-          docker-compose down
           docker-compose up -d         
-          
+          docker system prune -af
 
           # Запустить новый контейнер на основе последнего образа
           # docker run -d --name backend_michail -p 8080:8080 \-v /var/lib/docker/volumes/db-data/_data:/app/database \zagaryds/backend_michail:latest
