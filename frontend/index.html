@@ -115,13 +115,13 @@
                 
                 newsList.forEach(function(news) {
                     var newsElement = `
-                        <div class="list-group-item">
-                            <div class="d-flex justify-content-center mb-1">
-                                <img src="${news.imageUrl}" class="card-img w-100" alt="news-image">
-                            </div>
-                            <h5>${news.title}</h5>
-                            <p>${news.content}</p>
-                        </div>`;
+                    <div class="list-group-item">
+                    <div class="d-flex justify-content-center mb-1">
+                    <img src="https://back.hram48plosk.ru/files/${news.imageUrl}" class="card-img w-100" alt="news-image">
+                    </div>
+                     <h5>${news.title}</h5>
+                     <p>${news.content}</p>
+                     </div>`;
                     $newsList.append(newsElement);
                 });
             },
