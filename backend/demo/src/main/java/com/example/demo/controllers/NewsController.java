@@ -60,7 +60,7 @@ public class NewsController {
             // Сохраняем файл
             image.transferTo(destinationFile);
             System.out.println("Файл сохранён: " + destinationFile.getPath());
-            return destinationFile.getPath(); // Возвращаем путь к файлу
+            return fileName;
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Не удалось сохранить файл", e);
