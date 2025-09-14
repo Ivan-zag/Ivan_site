@@ -41,24 +41,6 @@
                         </div>
                         <div class="card-body">
                             <div class="list-group" id="news-list">
-                                <div class="list-group-item">
-                                  <div class="d-flex justify-content-center mb-1">
-                                    <img src="images/pasha.jpg" class="card-img w-100" alt="pasha">
-                                  </div>
-                                    <p>ХРИСТОС ВОСКРЕСЕ!
-
-С Воскресным днём!
-
-Теперь настала ПАСХА.
-Святой и Светлый день.
-Но это Пасха маленькая,
-а будет ПАСХА ВЕЛИКАЯ,
-Великий Осмой День,
-которому конца никогда,
-ни во веки веков не будет</p>
-                                </div>
-                                <div class="list-group-item">Новость 2</div>
-                                <div class="list-group-item">Новость 3</div>
                             </div>
                         </div>
                     </div>
@@ -74,7 +56,13 @@
                             <h4>Обращение настоятеля</h4>
                         </div>
                         <div class="card-body">
-                            <p>Здесь будет краткая информация о храме и текущих событиях.</p>
+                            <blockquote class="blockquote">Мы в отношении к ближним должны быть как словом, 
+                                так и мыслью чисты и ко всем равны, иначе жизнь нашу сделаем бесполезной.
+                            <br></br>
+                            <figcaption class="blockquote-footer">
+                                прп. Серафим Саровский
+                            </figcaption>
+                            </blockquote>
                         </div>
                     </div>
 
@@ -113,7 +101,36 @@
     <script>
         $(document).ready(function() {
             $('#navbar-container').load('navbar.html');
-            let currentDate = new Date();                                    
+            
+    // Загружаем новости
+    loadNews();
+    
+    function loadNews() {
+        $.ajax({
+            url: 'https://back.hram48plosk.ru/api/news', // URL бэкенда
+            type: 'GET',
+            success: function(newsList) {
+                var $newsList = $('#news-list');
+                $newsList.empty();  // Очищаем старые элементы
+                
+                newsList.forEach(function(news) {
+                    var newsElement = `
+                    <div class="list-group-item">
+                    <div class="d-flex justify-content-center mb-1">
+                    <img src="https://back.hram48plosk.ru/api/files/${news.imageUrl}" class="card-img w-100" alt="news-image">
+                    </div>
+                     <h5>${news.title}</h5>
+                     <p>${news.content}</p>
+                     </div>`;
+                    $newsList.append(newsElement);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Ошибка загрузки новостей", error);
+                alert('Не удалось загрузить новости!');
+            }
+        });
+    }
         });
     </script>
 </body>

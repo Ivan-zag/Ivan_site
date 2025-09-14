@@ -12,40 +12,47 @@
 body {        
     font-family: 'Cinzel', serif;  
 }
+
 .header {
     font-family: 'Cinzel', serif;
-    background-color: #83acd4; /* Основной цвет фона */
-    background-image: url('../images/ornament.svg'); /* Путь к файлу узора */
-    background-size: 50px 50px; /* Размер повторяющегося узора */
-    background-repeat: repeat; /* Повторяем узор по всей области */
-    
-    /* Настройка прозрачности только для фонового изображения */
-    mix-blend-mode: soft-light; /* Режим наложения для мягкости */
-    -webkit-background-filter: saturate(50%) blur(0.5px); /* Для Safari */
-    background-filter: saturate(50%) blur(0.5px); /* Эффект размытия */
-    
-    /* Прозрачность через blend-mode */
-    background-blend-mode: soft-light;
-    
+    align-items: center; /* Вертикальное центрирование */
     color: #FFF5E1;
     padding: 20px 20px;
     position: relative;
-    
-    /* Дополнительные настройки для совместимости */
-    -webkit-background-size: 50px 50px;
-    -moz-background-size: 50px 50px;
-    -o-background-size: 50px 50px;
+    background-color: #83acd4;            
 }
 
-.header h1 {
-            margin: 0; /* Убираем отступы у заголовка */
-            font-size: 2.5rem; /* Размер шрифта */
-        }
+.header h3{
+    font-size: 2.5rem; /* Размер шрифта */
+}
+
+.header-pattern {
+    
+    
+    background: radial-gradient(
+        circle at top,
+        rgba(79, 70, 228, 0.45) 10%,
+        rgba(79, 70, 228, 0.45) 15%,
+        transparent 16%
+    ),
+    radial-gradient(
+        circle at bottom,
+        rgba(79, 70, 228, 0.45) 20%,
+        rgba(79, 70, 228, 0.45) 25%,
+        transparent 26%
+    );
+    background-size: 3em 3em; /* Размер узора */
+    background-color: rgba(131, 172, 212, 0.45); /* Фоновый цвет */
+    background-size: cover; /* Масштабирование изображение */
+    margin-left: auto; /* Двигаем узор в правую часть */
+}
+
+
 @media (max-width: 768px) {
     .header {
         text-align: center; /* Центрирование заголовка на мобильных устройствах */
     }
-    .header h1 {
+    .header h3 {
         font-size: 2rem; /* Уменьшение размера шрифта на мобильных устройствах */
     }
     .overlay-container {      
