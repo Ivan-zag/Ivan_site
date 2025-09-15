@@ -15,11 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/news")
 public class NewsController {
 
-    // Сервис для работы с новостями
     private final NewsService newsService;
+    private final MinioService minioService;
 
-    public NewsController(NewsService newsService) {
+    public NewsController(NewsService newsService, MinioService minioService) {
         this.newsService = newsService;
+        this.minioService = minioService;
     }
 
     @PostMapping
@@ -30,41 +31,13 @@ public class NewsController {
         newsDto.setTitle(title);
         newsDto.setContent(content);
 
-        // Логика сохранения изображения, если оно загружено
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            // Сохраните изображение и установите путь к нему в newsDto
-            String imagePath = saveImage(imageUrl);
-            newsDto.setImageUrl(imagePath);
+            String fileName = minioService.upload(imageUrl);
+            newsDto.setImageUrl(fileName);
         }
 
         NewsDto createdNews = newsService.createNews(newsDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNews);
-    }
-
-    private String saveImage(MultipartFile image) {
-        // Каталог, в который будут сохранены изображения
-        String uploadDir = "/app/uploads"; // Каталог
-        // Убедитесь, что директория существует, и создайте её, если необходимо
-        File uploadDirectory = new File(uploadDir);
-        if (!uploadDirectory.exists()) {
-            uploadDirectory.mkdirs();
-        }
-
-        // Генерация уникального имени файла
-        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-
-        // Путь для сохранения файла
-        File destinationFile = new File(uploadDirectory, fileName);
-
-        try {
-            // Сохраняем файл
-            image.transferTo(destinationFile);
-            System.out.println("Файл сохранён: " + destinationFile.getPath());
-            return fileName;
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Не удалось сохранить файл", e);
-        }
     }
 
     @GetMapping
