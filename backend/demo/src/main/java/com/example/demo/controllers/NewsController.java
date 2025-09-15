@@ -1,7 +1,5 @@
 package com.example.demo.controllers;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,7 +31,8 @@ public class NewsController {
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
             String fileName = minioService.upload(imageUrl);
-            newsDto.setImageUrl(fileName);
+            String getUrl = minioService.getPublicUrl(fileName);
+            newsDto.setImageUrl(getUrl);
         }
 
         NewsDto createdNews = newsService.createNews(newsDto);
