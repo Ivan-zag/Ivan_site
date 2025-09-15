@@ -46,8 +46,7 @@ jobs:
           # if [ "$(docker ps -q -f name=backend_michail)" ]; then              
           # docker rm -f backend_michail
           # fi
-          
-          docker-compose down
+          docker-compose pull
           docker-compose up -d         
           docker system prune -af
 
