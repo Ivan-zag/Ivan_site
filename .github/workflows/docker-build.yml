@@ -42,10 +42,11 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
+          docker-compose down
           # Остановить и удалить контейнер, если он уже работает
-          # if [ "$(docker ps -q -f name=backend_michail)" ]; then              
-          # docker rm -f backend_michail
-          # fi
+          if [ "$(docker ps -q -f name=backend_michail)" ]; then              
+            docker rm -f backend_michail
+          fi
           docker-compose pull
           docker-compose up -d         
           docker system prune -af
