@@ -1,4 +1,5 @@
 package com.example.demo.services;
+
 import com.example.demo.models.*;
 import com.example.demo.repositories.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class NewsService {
-    
+
     @Autowired
     private NewsRepository newsRepository;
 
@@ -77,4 +78,3 @@ public class NewsService {
         return news;
     }
 }
-
