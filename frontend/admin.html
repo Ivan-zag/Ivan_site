@@ -219,7 +219,7 @@ $(function() {
         $.get('https://back.hram48plosk.ru/api/news', function(data){
             newsList = data || [];
             var $s = $('#editNewsSelect').empty();
-            newsList.slice().reverse().forEach(x => $s.append($('<option>').val(x.id).text(x.title)));
+            newsList.forEach(x => $s.append($('<option>').val(x.id).text(x.title)));
             if(newsList.length) $s.val(newsList[0].id).trigger('change');
             editNewsModal.show();
         });

@@ -1,8 +1,9 @@
 package com.example.demo.repositories;
+
 import java.util.List;
 import com.example.demo.models.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NewsRepository extends JpaRepository<News, Long> {
-    List<News> findByActiveTrue();
+    List<News> findByActiveTrueOrderByCreatedAtDesc();
 }

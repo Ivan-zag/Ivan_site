@@ -26,7 +26,7 @@ public class NewsService {
     }
 
     public List<NewsDto> getActiveNews() {
-        List<News> activeNews = newsRepository.findByActiveTrue();
+        List<News> activeNews = newsRepository.findByActiveTrueOrderByCreatedAtDesc();
         return activeNews.stream()
                 .map(this::mapToNewsDto)
                 .collect(Collectors.toList());

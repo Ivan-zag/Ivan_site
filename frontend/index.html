@@ -113,7 +113,7 @@
                 var $newsList = $('#news-list');
                 $newsList.empty();  // Очищаем старые элементы
                 
-                newsList.slice().reverse().forEach(function(news) {
+                newsList.forEach(function(news) {
                     var newsElement = `
                     <div class="list-group-item">
                     <div class="d-flex justify-content-center mb-1">
