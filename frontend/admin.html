@@ -233,24 +233,30 @@ $(function() {
         $('#editNewsImageInput').val('');
     });
     $('#editNewsForm').on('submit', function(e){
-        e.preventDefault();
-        var id = $('#editNewsSelect').val();
-        var n = newsList.find(x => x.id == id);
-        var fd = new FormData();
-        fd.append('title', $('#editNewsTitle').val());
-        fd.append('content', $('#editNewsContent').val());
-        if($('#editNewsImageInput')[0].files[0]) {
-            fd.append('imageUrl', $('#editNewsImageInput')[0].files[0]);
-        } else if (n && n.imageUrl) {
-            fd.append('imageUrl', n.imageUrl)
-        }
-        $.ajax({
-            url:'https://back.hram48plosk.ru/api/news/'+id,
-            type:'PUT', data:fd, processData:false, contentType:false,
-            success: function(){ alert('Сохранено!'); editNewsModal.hide(); },
-            error:function(){ alert('Ошибка!'); }
-        });
+    e.preventDefault();
+    var id = $('#editNewsSelect').val();
+    var n = newsList.find(x => x.id == id);
+    var fd = new FormData();
+    fd.append('title', $('#editNewsTitle').val());
+    fd.append('content', $('#editNewsContent').val());
+
+    // Добавляем файл только если выбран!
+    var selectedFile = $('#editNewsImageInput')[0].files[0];
+    if (selectedFile) {
+        fd.append('imageUrl', selectedFile);
+    }
+
+    $.ajax({
+        url:'https://back.hram48plosk.ru/api/news/' + id,
+        type:'PUT',
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function(){ alert('Сохранено!'); editNewsModal.hide(); },
+        error: function(){ alert('Ошибка!'); }
     });
+});
+
 
     $('#deleteNewsBtn').click(function(){
         $.get('https://back.hram48plosk.ru/api/news', function(data){
