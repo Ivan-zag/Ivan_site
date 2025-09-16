@@ -227,9 +227,29 @@
     $('#news-edit button').eq(1).click(function() {
         editNewsModal.show();
     });
+    
 
     $('#editNewsForm').on('submit', function(event) {
     event.preventDefault();
+    var newsList = []; // глобальная переменная для хранения массива новостей
+
+    // При открытии модального окна редактирования:
+    $.get('https://back.hram48plosk.ru/api/news', function(data) {
+        newsList = data || [];
+        var $select = $('#editNewsSelect');
+        $select.empty();
+        newsList.forEach(function(news) {
+        $select.append($('<option>', {
+            value: news.id,
+            text: news.title
+        }));
+    });
+    if (newsList.length) {
+        $select.val(newsList[0].id).trigger('change'); // выбрать первую новость
+    }
+    editNewsModal.show();
+    });
+
     var selectedId = $('#editNewsSelect').val();
     var newTitle = $('#editNewsTitle').val();
     var newContent = $('#editNewsContent').val();
