@@ -46,7 +46,21 @@ public class NewsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NewsDto> updateNews(@PathVariable Long id, @RequestBody NewsDto newsDto) {
+    public ResponseEntity<NewsDto> updateNews(
+            @PathVariable Long id,
+            @RequestParam String title,
+            @RequestParam String content,
+            @RequestParam(required = false) MultipartFile imageUrl) {
+
+        // Находим существующую новость и заполняем поля из формы
+        NewsDto newsDto = new NewsDto();
+        newsDto.setTitle(title);
+        newsDto.setContent(content);
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            String fileName = minioService.upload(imageUrl);
+            String getUrl = minioService.getPublicUrl(fileName);
+            newsDto.setImageUrl(getUrl);
+        }
         NewsDto updatedNews = newsService.updateNews(id, newsDto);
         return ResponseEntity.ok(updatedNews);
     }

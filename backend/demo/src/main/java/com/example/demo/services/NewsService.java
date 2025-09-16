@@ -41,7 +41,9 @@ public class NewsService {
         News news = optionalNews.get();
         news.setTitle(newsDto.getTitle());
         news.setContent(newsDto.getContent());
-        news.setImageUrl(newsDto.getImageUrl());
+        String img = newsDto.getImageUrl();
+        if (img != null && !img.isEmpty())
+            news.setImageUrl(img);
         news.setActive(newsDto.isActive());
         News updatedNews = newsRepository.save(news);
         return mapToNewsDto(updatedNews);

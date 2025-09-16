@@ -77,17 +77,30 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editNewsForm">
-                    <div class="mb-3">
-                        <label for="editNewsTitle" class="form-label">Заголовок</label>
-                        <input type="text" class="form-control" id="editNewsTitle" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editNewsContent" class="form-label">Содержимое</label>
-                        <textarea class="form-control" id="editNewsContent" rows="3" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
-                </form>
+                <form id="editNewsForm" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="editNewsSelect" class="form-label">Выберите новость</label>
+        <select id="editNewsSelect" class="form-select" required></select>
+    </div>
+    <div class="mb-3">
+        <label for="editNewsTitle" class="form-label">Заголовок</label>
+        <input type="text" class="form-control" id="editNewsTitle" required>
+    </div>
+    <div class="mb-3">
+        <label for="editNewsContent" class="form-label">Содержимое</label>
+        <textarea class="form-control" id="editNewsContent" rows="3" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Текущая картинка</label><br>
+        <img id="editNewsImage" src="" style="max-width:240px;" alt="prev" />
+    </div>
+    <div class="mb-3">
+        <label for="editNewsImageInput" class="form-label">Заменить картинку</label>
+        <input type="file" name="imageUrl" class="form-control" id="editNewsImageInput">
+    </div>
+    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+</form>
+
             </div>
         </div>
     </div>
@@ -214,6 +227,47 @@
     $('#news-edit button').eq(1).click(function() {
         editNewsModal.show();
     });
+
+    $('#editNewsForm').on('submit', function(event) {
+    event.preventDefault();
+    var selectedId = $('#editNewsSelect').val();
+    var newTitle = $('#editNewsTitle').val();
+    var newContent = $('#editNewsContent').val();
+    var selectedNews = newsList.find(function(n) { return n.id == selectedId; });
+    if (!selectedNews) { alert('Новость не выбрана'); return; }
+
+    var formData = new FormData();
+    formData.append('title', newTitle);
+    formData.append('content', newContent);
+
+    // Если выбрана новая картинка — добавить в форму
+    var file = $('#editNewsImageInput')[0].files[0];
+    if (file) {
+        formData.append('imageUrl', file); // ключ должен совпадать с backend!
+    } else {
+        // Если картинка не изменялась — прокинь в DTO/put запрос старый imageUrl (или можно не указывать вообще)
+        formData.append('imageUrl', selectedNews.imageUrl || '');
+    }
+
+    // Отправляем PUT multipart-запрос (нужно поддерживать его на backend!)
+    $.ajax({
+        url: 'https://back.hram48plosk.ru/api/news/' + selectedId,
+        type: 'PUT',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(result){
+            alert('Новость успешно обновлена!');
+            editNewsModal.hide();
+        },
+        error: function(err){
+            alert('Ошибка при обновлении новости');
+            console.error(err);
+        }
+    });
+});
+
+
 
     var deleteNewsModal = new bootstrap.Modal(document.getElementById('deleteNewsModal'), {
         keyboard: false
