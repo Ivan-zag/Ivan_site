@@ -32,6 +32,12 @@ public class NewsService {
                 .collect(Collectors.toList());
     }
 
+    public NewsDto getById(Long id) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("News not found"));
+        return mapToNewsDto(news);
+    }
+
     @Transactional
     public NewsDto updateNews(Long id, NewsDto newsDto) {
         Optional<News> optionalNews = newsRepository.findById(id);

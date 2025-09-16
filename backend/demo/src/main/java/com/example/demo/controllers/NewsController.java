@@ -53,15 +53,22 @@ public class NewsController {
             @RequestParam String content,
             @RequestParam(required = false) MultipartFile imageUrl) {
 
-        // Находим существующую новость и заполняем поля из формы
+        // Находим существующую новость
+        NewsDto oldNews = newsService.getById(id);
         NewsDto newsDto = new NewsDto();
         newsDto.setTitle(title);
         newsDto.setContent(content);
+        newsDto.setActive(oldNews.isActive());
+        newsDto.setCreatedAt(oldNews.getCreatedAt());
+
         if (imageUrl != null && !imageUrl.isEmpty()) {
             String fileName = minioService.upload(imageUrl);
             String getUrl = minioService.getPublicUrl(fileName);
             newsDto.setImageUrl(getUrl);
+        } else {
+            newsDto.setImageUrl(oldNews.getImageUrl());
         }
+
         NewsDto updatedNews = newsService.updateNews(id, newsDto);
         return ResponseEntity.ok(updatedNews);
     }
