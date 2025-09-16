@@ -1,65 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
      <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Панель управления</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome для иконок -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">   
+    <link rel="stylesheet" href="css/style.css">
     <link rel="shortcut icon" href="images/icons-16.png" type="image/x-icon">
-    <link rel="shortcut icon" href="images/icons-32.png" type="image/x-icon">      
+    <link rel="shortcut icon" href="images/icons-32.png" type="image/x-icon">
 </head>
 <body>
-    <div class="overlay-container">
+<div class="overlay-container">
     <div id="navbar-container"></div>
-    <div class="container">        
-        <div class="card p-3">        
+    <div class="container">
+        <div class="card p-3">
             <h2 class="text-center fw-bold fs-2 mb-3">Панель управления</h2>
             <div class="card w-70 m-3 d-flex flex-row">
                 <div class="card w-25 m-3 h-100 d-inline-block">
                     <ul class="list-group text-center list-group-flush">
                         <li class="list-group-item btn-outline-primary w-100" id="news-btn">Новости</li>
-                        <li class="list-group-item btn-outline-primary w-100" id="services-btn">Богослужения</li>                        
+                        <li class="list-group-item btn-outline-primary w-100" id="services-btn">Богослужения</li>
                     </ul>
                 </div>
                 <div id="news-edit" class="edit-section card mb-3 mt-3 me-3 p-3 w-75 d-none">
                     <h3>Редактирование Новости</h3>
-                    <button>Добавить новость</button>
-                    <button>Редактировать новость</button>
-                    <button>Удалить новость</button>
+                    <button id="addNewsBtn">Добавить новость</button>
+                    <button id="editNewsBtn">Редактировать новость</button>
+                    <button id="deleteNewsBtn">Удалить новость</button>
                 </div>
                 <div id="services-edit" class="edit-section card mb-3 mt-3 me-3 p-3 w-75 d-none">
                     <h3>Редактирование Богослужения</h3>
-                    <button>Добавить богослужение</button>                    
-                    <button>Удалить богослужение</button>
-                </div>                
+                    <button id="addServiceBtn">Добавить богослужение</button>
+                    <button id="deleteServiceBtn">Удалить богослужение</button>
+                </div>
             </div>
         </div>
-    </div>   
+    </div>
 </div>
-<!-- Модальное окно для добавления новостей -->
+
+<!-- МОДАЛКИ ДЛЯ НОВОСТЕЙ -->
 <div class="modal fade" id="addNewsModal" tabindex="-1" aria-labelledby="addNewsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addNewsModalLabel">Добавить новость</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Добавить новость</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="newsForm" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="newsTitle" class="form-label">Заголовок</label>
+                        <label>Заголовок</label>
                         <input type="text" class="form-control" id="newsTitle" required>
                     </div>
                     <div class="mb-3">
-                        <label for="newsContent" class="form-label">Содержимое</label>
+                        <label>Содержимое</label>
                         <textarea class="form-control" id="newsContent" rows="3" required></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="newsImage" class="form-label">Изображение</label>
+                        <label>Изображение</label>
                         <input type="file" name="imageUrl" class="form-control" id="newsImage">
                     </div>
                     <button type="submit" class="btn btn-outline-primary">Сохранить</button>
@@ -68,58 +68,53 @@
         </div>
     </div>
 </div>
-<!-- Модальное окно для редактирования новостей -->
 <div class="modal fade" id="editNewsModal" tabindex="-1" aria-labelledby="editNewsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editNewsModalLabel">Редактировать новость</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Редактировать новость</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="editNewsForm" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="editNewsSelect" class="form-label">Выберите новость</label>
-        <select id="editNewsSelect" class="form-select" required></select>
-    </div>
-    <div class="mb-3">
-        <label for="editNewsTitle" class="form-label">Заголовок</label>
-        <input type="text" class="form-control" id="editNewsTitle" required>
-    </div>
-    <div class="mb-3">
-        <label for="editNewsContent" class="form-label">Содержимое</label>
-        <textarea class="form-control" id="editNewsContent" rows="3" required></textarea>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Текущая картинка</label><br>
-        <img id="editNewsImage" src="" style="max-width:240px;" alt="prev" />
-    </div>
-    <div class="mb-3">
-        <label for="editNewsImageInput" class="form-label">Заменить картинку</label>
-        <input type="file" name="imageUrl" class="form-control" id="editNewsImageInput">
-    </div>
-    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
-</form>
-
+                    <div class="mb-3">
+                        <label>Выберите новость</label>
+                        <select id="editNewsSelect" class="form-select" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Заголовок</label>
+                        <input type="text" class="form-control" id="editNewsTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Содержимое</label>
+                        <textarea class="form-control" id="editNewsContent" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Текущая картинка</label><br>
+                        <img id="editNewsImage" src="" style="max-width:240px;" alt="prev" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Заменить картинку</label>
+                        <input type="file" name="imageUrl" class="form-control" id="editNewsImageInput">
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Модальное окно для удаления новостей -->
 <div class="modal fade" id="deleteNewsModal" tabindex="-1" aria-labelledby="deleteNewsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteNewsModalLabel">Удалить новость</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Удалить новость</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="deleteNewsForm">
                     <div class="mb-3">
-                        <label for="newsToDelete" class="form-label">Выберите новость для удаления</label>
-                        <select class="form-select" id="newsToDelete" required>
-                            <!-- Options will be filled dynamically -->
-                        </select>
+                        <label>Выберите новость для удаления</label>
+                        <select class="form-select" id="newsToDelete" required></select>
                     </div>
                     <button type="submit" class="btn btn-outline-danger">Удалить</button>
                 </form>
@@ -127,308 +122,190 @@
         </div>
     </div>
 </div>
-<!-- Модальное окно для добавления богослужения -->
+
+<!-- МОДАЛКИ ДЛЯ БОГОСЛУЖЕНИЙ -->
 <div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addServiceModalLabel">Добавить богослужение</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Добавить богослужение</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="serviceForm">
+                <form id="serviceForm" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="serviceFile" class="form-label">Загрузить файл богослужения (Word)</label>
-                        <input type="file" class="form-control" id="serviceFile" accept=".doc, .docx" required>
+                        <label>Файл богослужения (Word)</label>
+                        <input type="file" class="form-control" id="serviceFile" name="file" accept=".doc,.docx" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Название</label>
+                        <input type="text" class="form-control" id="serviceTitle" name="title" required>
                     </div>
                     <button type="submit" class="btn btn-outline-primary">Загрузить</button>
-                    <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Модальное окно для удаления богослужения -->
 <div class="modal fade" id="deleteServiceModal" tabindex="-1" aria-labelledby="deleteServiceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteServiceModalLabel">Удаление богослужения</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Удалить богослужение</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Вы уверены, что хотите удалить богослужение?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="confirmDeleteService" class="btn btn-outline-danger">Да</button>
-                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Нет</button>
-                <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>                
+                <form id="deleteServiceForm">
+                    <div class="mb-3">
+                        <label>Выберите богослужение</label>
+                        <select class="form-select" id="serviceToDelete" required></select>
+                    </div>
+                    <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
-   
-    <div class="page">
-        
+
+<footer class="footer">
+    <div class="container text-center">
+        <p>&copy; 2025 Храм Архангела Михаила. Все права защищены.</p>
+        <p>Контакты: <a href="mailto:info@example.com">info@example.com</a></p>
     </div>
-    <footer class="footer">
-        <div class="container text-center">
-            <p>&copy; 2025 Храм Архангела Михаила. Все права защищены.</p>
-            <p>Контакты: <a href="mailto:info@example.com">info@example.com</a></p>
-        </div>
-    </footer>
+</footer>
 
-     <!-- jQuery и Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-         $(document).ready(function() {
-    var addNewsModal = new bootstrap.Modal(document.getElementById('addNewsModal'), {
-        keyboard: false
-    });
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+$(function() {
+    $('#navbar-container').load('navbar.html');
 
-    $('#news-edit button:first').click(function() {
-        addNewsModal.show();
-    });
+    var newsList = [], serviceList = [];
+    var addNewsModal = new bootstrap.Modal($('#addNewsModal')[0]);
+    var editNewsModal = new bootstrap.Modal($('#editNewsModal')[0]);
+    var deleteNewsModal = new bootstrap.Modal($('#deleteNewsModal')[0]);
+    var addServiceModal = new bootstrap.Modal($('#addServiceModal')[0]);
+    var deleteServiceModal = new bootstrap.Modal($('#deleteServiceModal')[0]);
 
-    $('#newsForm').on('submit', function(event) {
-    event.preventDefault();
-    var formData = new FormData();
-    formData.append('title', $('#newsTitle').val());
-    formData.append('content', $('#newsContent').val());
-    var file = $('#newsImage')[0].files[0];
-    if (file) {
-        formData.append('imageUrl', file);
-    }
-    $.ajax({
-        url: 'https://back.hram48plosk.ru/api/news',  // ваш эндпоинт на бэкенде для создания новости
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            alert('Новость успешно добавлена!');
-            // закрытие модального окна
-            addNewsModal.hide();
-            // обновите список новостей, например, вызвав функцию fetchNews() у вас на фронте
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-            alert('Ошибка при добавлении новости!');
-        }
-        });
-    });
-
-
-    var editNewsModal = new bootstrap.Modal(document.getElementById('editNewsModal'), {
-        keyboard: false
-    });
-
-    $('#news-edit button').eq(1).click(function() {
-        editNewsModal.show();
-    });
-    
-
-    $('#editNewsForm').on('submit', function(event) {
-    event.preventDefault();
-    var newsList = []; // глобальная переменная для хранения массива новостей
-
-    // При открытии модального окна редактирования:
-    $.get('https://back.hram48plosk.ru/api/news', function(data) {
-        newsList = data || [];
-        var $select = $('#editNewsSelect');
-        $select.empty();
-        newsList.forEach(function(news) {
-        $select.append($('<option>', {
-            value: news.id,
-            text: news.title
-        }));
-    });
-    if (newsList.length) {
-        $select.val(newsList[0].id).trigger('change'); // выбрать первую новость
-    }
-    editNewsModal.show();
-    });
-
-    var selectedId = $('#editNewsSelect').val();
-    var newTitle = $('#editNewsTitle').val();
-    var newContent = $('#editNewsContent').val();
-    var selectedNews = newsList.find(function(n) { return n.id == selectedId; });
-    if (!selectedNews) { alert('Новость не выбрана'); return; }
-
-    var formData = new FormData();
-    formData.append('title', newTitle);
-    formData.append('content', newContent);
-
-    // Если выбрана новая картинка — добавить в форму
-    var file = $('#editNewsImageInput')[0].files[0];
-    if (file) {
-        formData.append('imageUrl', file); // ключ должен совпадать с backend!
-    } else {
-        // Если картинка не изменялась — прокинь в DTO/put запрос старый imageUrl (или можно не указывать вообще)
-        formData.append('imageUrl', selectedNews.imageUrl || '');
-    }
-
-    // Отправляем PUT multipart-запрос (нужно поддерживать его на backend!)
-    $.ajax({
-        url: 'https://back.hram48plosk.ru/api/news/' + selectedId,
-        type: 'PUT',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(result){
-            alert('Новость успешно обновлена!');
-            editNewsModal.hide();
-        },
-        error: function(err){
-            alert('Ошибка при обновлении новости');
-            console.error(err);
-        }
-    });
-});
-
-
-
-    var deleteNewsModal = new bootstrap.Modal(document.getElementById('deleteNewsModal'), {
-        keyboard: false
-    });
-
-    $('#news-edit button').eq(2).click(function() {
-        var newsData = [
-            { id: 1, title: "Первая новость" },
-            { id: 2, title: "Вторая новость" },
-            { id: 3, title: "Третья новость" }
-        ];
-
-        var $newsToDelete = $('#newsToDelete');
-        $newsToDelete.empty();
-        $.each(newsData, function(index, news) {
-            $newsToDelete.append($('<option>', {
-                value: news.id,
-                text: news.title
-            }));
-        });
-
-        deleteNewsModal.show();
-    });
-
-    var addServiceModal = new bootstrap.Modal(document.getElementById('addServiceModal'), {
-        keyboard: false
-    });
-
-    // Открытие модального окна добавления богослужения
-    $('#services-edit button:first').click(function() {
-        addServiceModal.show();
-    });
-
-    $('#serviceForm').on('submit', function(event) {
-    event.preventDefault();
-    
-    // Получаем выбранный файл из инпута
-    var fileInput = document.getElementById('serviceFile');
-    var file = fileInput.files[0];
-
-    if (file) {
-        var formData = new FormData();
-        formData.append('file', file); // Передаём файл под ключом 'file'
-
-        console.log("Отправляемый файл:", file.name);
-        $('#serviceForm button').addClass('d-none');
-        $('#spinner').removeClass('d-none');
-        $.ajax({
-            url: 'https://back.hram48plosk.ru/api/schedule/upload',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                console.log("Расписание загружено", response);
-                addServiceModal.hide();
-                alert('Расписание успешно добавлено!');
-            },
-            error: function(xhr, status, error) {
-                console.error("Ошибка загрузки расписания", error);
-                alert('Ошибка при добавлении расписания!');
-            },
-            complete: function() {
-                // Скрываем спиннер после завершения
-                $('#spinner').addClass('d-none');
-                $('#serviceForm button').removeClass('d-none');
-            }
-        });
-    } else {
-        alert('Пожалуйста, выберите файл для загрузки.');
-    }
-    });
-
-
-    var deleteServiceModal = new bootstrap.Modal(document.getElementById('deleteServiceModal'), {
-        keyboard: false
-    });
-
-    // Открытие модального окна удаления богослужения
-    $('#services-edit button').eq(1).click(function() {
-        deleteServiceModal.show();
-    });
-
-    $('#confirmDeleteService').click(function() {
-    // Сначала выполняем запрос для получения последнего ID
-    $('#deleteServiceModal button').addClass('d-none');
-    $('#spinner').removeClass('d-none');
-    $.ajax({
-        url: 'https://back.hram48plosk.ru/api/schedule/last', // API для получения последнего ID
-        type: 'GET',
-        success: function(response) {
-            if (response && response.id) { // Проверяем, есть ли поле ID
-                var lastId = response.id; // Извлекаем последний ID
-
-                var deleteUrl = `https://back.hram48plosk.ru/api/schedule/${lastId}`;
-                
-                // Далее выполняем запрос на удаление с последним ID
-                $.ajax({
-                    url: deleteUrl,
-                    type: 'DELETE',
-                    success: function(response) {
-                        console.log("Богослужение удалено", response);
-                        deleteServiceModal.hide();
-                        alert('Расписание успешно удалено!');
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Ошибка удаления расписания", error);
-                        alert('Ошибка при удалении расписания!');
-                    },
-                    complete: function() {
-                        // Скрываем спиннер после завершения
-                        $('#deleteServiceModal button').removeClass('d-none');
-                        $('#spinner').addClass('d-none');
-                    }
-                });
-            } else {
-                alert('Не удалось получить последний ID расписания.');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error("Ошибка получения последнего ID", error);
-            alert('Ошибка при получении последнего ID расписания.');
-        }
-        });
-    });
-
-
+    // Меню режимов
     $('#news-btn').click(function() {
         $('.edit-section').addClass('d-none');
         $('#news-edit').removeClass('d-none');
     });
-
     $('#services-btn').click(function() {
         $('.edit-section').addClass('d-none');
         $('#services-edit').removeClass('d-none');
-    });    
+    });
 
-    $('#navbar-container').load('navbar.html');
+    // ======== НОВОСТИ ========
+
+    $('#addNewsBtn').click(function() { addNewsModal.show(); });
+    $('#newsForm').on('submit', function(e){
+        e.preventDefault();
+        var fd = new FormData(this);
+        $.ajax({
+            url: 'https://back.hram48plosk.ru/api/news',
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function() { alert('Новость добавлена!'); addNewsModal.hide(); },
+            error: function() { alert('Ошибка добавления новости!'); }
+        });
+    });
+
+    $('#editNewsBtn').click(function(){
+        $.get('https://back.hram48plosk.ru/api/news', function(data){
+            newsList = data || [];
+            var $s = $('#editNewsSelect').empty();
+            newsList.forEach(x => $s.append($('<option>').val(x.id).text(x.title)));
+            if(newsList.length) $s.val(newsList[0].id).trigger('change');
+            editNewsModal.show();
+        });
+    });
+    $('#editNewsSelect').on('change', function(){
+        var id = $(this).val();
+        var n = newsList.find(x => x.id == id);
+        $('#editNewsTitle').val(n ? n.title : '');
+        $('#editNewsContent').val(n ? n.content : '');
+        $('#editNewsImage').attr('src', n ? n.imageUrl : '').toggle(!!(n && n.imageUrl));
+        $('#editNewsImageInput').val('');
+    });
+    $('#editNewsForm').on('submit', function(e){
+        e.preventDefault();
+        var id = $('#editNewsSelect').val();
+        var n = newsList.find(x => x.id == id);
+        var fd = new FormData();
+        fd.append('title', $('#editNewsTitle').val());
+        fd.append('content', $('#editNewsContent').val());
+        if($('#editNewsImageInput')[0].files[0]) {
+            fd.append('imageUrl', $('#editNewsImageInput')[0].files[0]);
+        } else if (n && n.imageUrl) {
+            fd.append('imageUrl', n.imageUrl)
+        }
+        $.ajax({
+            url:'https://back.hram48plosk.ru/api/news/'+id,
+            type:'PUT', data:fd, processData:false, contentType:false,
+            success: function(){ alert('Сохранено!'); editNewsModal.hide(); },
+            error:function(){ alert('Ошибка!'); }
+        });
+    });
+
+    $('#deleteNewsBtn').click(function(){
+        $.get('https://back.hram48plosk.ru/api/news', function(data){
+            newsList = data || [];
+            var $s = $('#newsToDelete').empty();
+            newsList.forEach(x => $s.append($('<option>').val(x.id).text(x.title)));
+            deleteNewsModal.show();
+        });
+    });
+    $('#deleteNewsForm').on('submit', function(e){
+        e.preventDefault();
+        var id = $('#newsToDelete').val();
+        $.ajax({
+            url:'https://back.hram48plosk.ru/api/news/'+id,
+            type:'DELETE',
+            success: function(){ alert('Удалено!'); deleteNewsModal.hide(); },
+            error:function(){ alert('Ошибка!'); }
+        });
+    });
+
+    // ======= БОГОСЛУЖЕНИЯ ==========
+
+    $('#addServiceBtn').click(function() { addServiceModal.show(); });
+    $('#serviceForm').on('submit', function(e){
+        e.preventDefault();
+        var fd = new FormData(this);
+        $.ajax({
+            url: 'https://back.hram48plosk.ru/api/schedule/upload',
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function() { alert('Богослужение загружено!'); addServiceModal.hide(); },
+            error: function() { alert('Ошибка!'); }
+        });
+    });
+
+    $('#deleteServiceBtn').click(function(){
+        $.get('https://back.hram48plosk.ru/api/schedule', function(data){
+            serviceList = data || [];
+            var $s = $('#serviceToDelete').empty();
+            serviceList.forEach(x => $s.append($('<option>').val(x.id).text(x.title || x.id)));
+            deleteServiceModal.show();
+        });
+    });
+    $('#deleteServiceForm').on('submit', function(e){
+        e.preventDefault();
+        var id = $('#serviceToDelete').val();
+        $.ajax({
+            url:'https://back.hram48plosk.ru/api/schedule/'+id,
+            type:'DELETE',
+            success: function(){ alert('Богослужение удалено!'); deleteServiceModal.hide(); },
+            error:function(){ alert('Ошибка!'); }
+        });
+    });
 });
-
-    </script>    
-    
+</script>
 </body>
 </html>
