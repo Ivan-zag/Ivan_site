@@ -307,41 +307,23 @@ $(function() {
     });
 
     $('#deleteServiceBtn').click(function(){
-    $.get('https://back.hram48plosk.ru/api/schedule', function(data){
-        serviceList = data || [];
-        
-        // Проверьте, есть ли богослужения, чтобы предложить для удаления
-        if (serviceList.length === 0) {
-            alert('Нет богослужений для удаления');
-            return;
-        }
-
-        // Получите последнее богослужение
-        var lastService = serviceList[serviceList.length - 1];
-        
-        console.log('Удаляем последнее богослужение с ID:', lastService.id); // Лог для проверки
-
-        // Подтверждение от пользователя
-        if (confirm(`Вы уверены, что хотите удалить богослужение с ID ${lastService.id}?`)) {
-            deleteService(lastService.id);
-        }
+        $.get('https://back.hram48plosk.ru/api/schedule/last', function(data){
+            serviceList = data || [];
+            var $s = $('#serviceToDelete').empty();
+            serviceList.forEach(x => $s.append($('<option>').val(x.id).text(x.title || x.id)));
+            deleteServiceModal.show();
+        });
     });
-});
-
-function deleteService(id) {
-    $.ajax({
-        url: 'https://back.hram48plosk.ru/api/schedule/' + id,
-        type: 'DELETE',
-        success: function() { 
-            alert('Богослужение удалено!');
-            // Возможно обновить UI, чтобы отразить изменения, например, обновление списка
-        },
-        error: function() { 
-            alert('Ошибка при удалении богослужения!');
-        }
+    $('#deleteServiceForm').on('submit', function(e){
+        e.preventDefault();
+        var id = $('#serviceToDelete').val();
+        $.ajax({
+            url:'https://back.hram48plosk.ru/api/schedule/'+id,
+            type:'DELETE',
+            success: function(){ alert('Богослужение удалено!'); deleteServiceModal.hide(); },
+            error:function(){ alert('Ошибка!'); }
+        });
     });
-}
-
 });
 </script>
 </body>
