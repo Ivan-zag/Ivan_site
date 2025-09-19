@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-import java.lang.reflect.Array;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
