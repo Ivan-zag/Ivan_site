@@ -19,8 +19,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/news", "/api/schedule").permitAll() // Разрешаем
-                                                                                                   // GET-запросы
+                        .requestMatchers(HttpMethod.GET, "/api/news", "/api/schedule/last").permitAll() // Разрешаем
+                        // GET-запросы
                         .requestMatchers("/api/login", "/api/public/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterAfter(jwtFilter,
