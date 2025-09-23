@@ -1,0 +1,13 @@
+ .no-markers {
+            list-style-type: none; /* Убираем маркеры */
+            padding-left: 0;       /* Убираем отступы */
+            margin: 0;             /* Убираем внешние отступы */
+        }
+
+.compact .d-flex {
+            margin-bottom: 0; /* Убираем отступы между d-flex элементами */
+        }
+      
+.compact hr {
+            margin: 0; /* Убираем или сокращаем отступы для hr */
+        }
