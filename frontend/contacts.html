@@ -11,16 +11,27 @@
     <link rel="stylesheet" href="css/style.css">  
     <link rel="shortcut icon" href="images/icons-16.png" type="image/x-icon">
     <link rel="shortcut icon" href="images/icons-32.png" type="image/x-icon">
-    <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>  
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=2e373ca5-4845-4f22-9e7c-43cea0dc7665&lang=ru_RU" type="text/javascript"></script>  
    <script type="text/javascript">
-    var map;
-    DG.then(function () {
-        map = DG.map('map', {
-            center: [52.610922,39.301331],
-            zoom: 13
-        });
-        DG.marker([52.610922,39.301331]).addTo(map).bindPopup('Храм Архангела Михаила');
-    });
+    ymaps.ready(init);
+    function init(){
+        // Создание карты.
+        var myMap = new ymaps.Map("map", {
+            // Координаты центра карты.
+            // Порядок по умолчанию: «широта, долгота».
+            // Чтобы не определять координаты центра карты вручную,
+            // воспользуйтесь инструментом Определение координат.
+           center: [52.610922,39.301331],
+           zoom: 13
+        }); 
+        var myPlacemark = new ymaps.GeoObject({
+        geometry: {
+        type: "Point",
+        coordinates: [52.610922,39.301331]
+    }
+});   
+  myMap.geoObjects.add(myPlacemark);      
+        };    
 </script>
 </head>
 <body>
