@@ -3,14 +3,19 @@ package com.example.demo.services;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
 public class JwtService {
     private static final long EXPIRATION = 1000 * 60 * 60 * 24; // 24 часа
-    private static final SecretKey KEY = Keys.hmacShaKeyFor("my_super_secret_key_my_super_secret_key!".getBytes()); // >=32
-                                                                                                                    // символа
+    private final SecretKey KEY;
+
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        this.KEY = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     public String generateToken(String username) {
         return Jwts.builder()
@@ -22,7 +27,7 @@ public class JwtService {
     }
 
     public String getUsername(String token) {
-        return Jwts.parser().verifyWith(KEY).build()
+        return Jwts.parser().setSigningKey(KEY).build()
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
@@ -30,7 +35,7 @@ public class JwtService {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().verifyWith(KEY).build().parseSignedClaims(token);
+            Jwts.parser().setSigningKey(KEY).build().parseSignedClaims(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
