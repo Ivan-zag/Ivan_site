@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Доступ для всех к GET запросам на /api/news и /api/schedule/last
                         .requestMatchers(HttpMethod.GET, "/api/news", "/api/schedule/last").permitAll()
-                        .requestMatchers("/api/login", "/api/public/**").permitAll()
+                        .requestMatchers("/api/login", "/api/register", "/api/public/**").permitAll()
                         // GET запросы на /api/news разрешены всем
                         .requestMatchers(HttpMethod.POST, "/api/news").hasRole("ADMIN") // Только админы
                         .requestMatchers(HttpMethod.PUT, "/api/news").hasRole("ADMIN") // Только админы
