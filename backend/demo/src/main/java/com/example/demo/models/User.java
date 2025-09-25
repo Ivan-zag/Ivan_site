@@ -14,7 +14,7 @@ public class User {
     @Column(nullable = false)
     private String password; // захешированный пароль
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Role role;
 
