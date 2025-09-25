@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Transactional
@@ -30,7 +32,7 @@ public class UserService {
     }
 
     public String generateToken(User user) {
-        return "dummy-jwt-token-for-" + user.getUsername(); // замените это реальной логикой JWT
+        return jwtService.generateToken(user.getUsername());
     }
 
     public void registerUser(UserDto userDto) {
