@@ -1,8 +1,9 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.User;
+import com.example.demo.models.*;
 import com.example.demo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,4 +27,15 @@ public class AuthController {
         }
         return ResponseEntity.status(401).body(Map.of("message", "Неверный логин или пароль!"));
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody UserDto userDto) {
+        try {
+            userService.registerUser(userDto);
+            return ResponseEntity.ok(Map.of("message", "Пользователь успешно создан!"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        }
+    }
+
 }

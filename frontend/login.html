@@ -49,7 +49,7 @@ $('#loginForm').on('submit', function(e) {
                 // Сохраняем токен (можно в localStorage)
                 localStorage.setItem('authToken', response.token);
                 // Редиректим в админку (замени path если нужно)
-                window.location.href = "/admin_panel.html";
+                window.location.href = "/admin.html";
             } else {
                 $('#loginError').text('Ошибка: неверный формат ответа.').show();
             }

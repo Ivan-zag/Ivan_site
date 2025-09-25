@@ -193,6 +193,14 @@
 $(function() {
     $('#navbar-container').load('navbar.html');
 
+    // Проверка наличия токена
+    const token = localStorage.getItem('authToken'); // или sessionStorage, в зависимости от потребностей
+    if (!token) {
+        // Если токена нет, перенаправляем на страницу входа
+        window.location.href = '/login.html';
+        return;
+    }
+
     var newsList = [], serviceList = [];
     var addNewsModal = new bootstrap.Modal($('#addNewsModal')[0]);
     var editNewsModal = new bootstrap.Modal($('#editNewsModal')[0]);

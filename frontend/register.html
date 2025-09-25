@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">   
+    <link rel="shortcut icon" href="images/icons-16.png" type="image/x-icon">
+    <link rel="shortcut icon" href="images/icons-32.png" type="image/x-icon">      
+</head>
+<body>
+    <div class="overlay-container">
+        <div id="navbar-container"></div>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card p-4 shadow">
+                        <h2 class="text-center fw-bold fs-4 mb-4">Регистрация нового пользователя</h2>
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <label for="registerUsername" class="form-label">Имя пользователя</label>
+                                <input type="text" class="form-control" id="registerUsername" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerPassword" class="form-label">Пароль</label>
+                                <input type="password" class="form-control" id="registerPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-secondary w-100">Зарегистрироваться</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page"></div>
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 2025 Храм Архангела Михаила. Все права защищены.</p>
+            <p>E-Mail: <a href="mailto:info@example.com">bvl-82@yandex.ru</a></p>
+        </div>
+    </footer>
+
+    <!-- jQuery и Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Загружаем навигационное меню
+        $('#navbar-container').load('navbar.html');
+
+        // Обработчик формы регистрации
+        $('#registerForm').on('submit', function(e) {
+            e.preventDefault();
+            var formData = {
+                username: $('#registerUsername').val(),
+                password: $('#registerPassword').val(),
+                role: 'ADMIN' // или другая роль
+            };
+            $.ajax({
+                url: 'https://back.hram48plosk.ru/api/register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    alert('Пользователь успешно создан!');
+                },
+                error: function(response) {
+                    alert('Ошибка создания пользователя!');
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
