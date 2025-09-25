@@ -227,6 +227,9 @@ $(function() {
         $.ajax({
             url: 'https://back.hram48plosk.ru/api/news',
             type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token  // передача токена
+            },
             data: fd,
             processData: false,
             contentType: false,
@@ -269,6 +272,9 @@ $(function() {
     $.ajax({
         url:'https://back.hram48plosk.ru/api/news/' + id,
         type:'PUT',
+        headers: {
+                'Authorization': 'Bearer ' + token  // передача токена
+            },
         data: fd,
         processData: false,
         contentType: false,
@@ -291,6 +297,9 @@ $(function() {
         var id = $('#newsToDelete').val();
         $.ajax({
             url:'https://back.hram48plosk.ru/api/news/'+id,
+            headers: {
+                'Authorization': 'Bearer ' + token  // передача токена
+            },
             type:'DELETE',
             success: function(){ alert('Удалено!'); deleteNewsModal.hide(); },
             error:function(){ alert('Ошибка!'); }
@@ -306,6 +315,9 @@ $(function() {
         $.ajax({
             url: 'https://back.hram48plosk.ru/api/schedule/upload',
             type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token  // передача токена
+            },
             data: fd,
             processData: false,
             contentType: false,
@@ -330,6 +342,9 @@ function deleteService(id) {
     $.ajax({
         url: 'https://back.hram48plosk.ru/api/schedule/' + id,
         type: 'DELETE',
+        headers: {
+                'Authorization': 'Bearer ' + token  // передача токена
+            },
         success: function(){
             alert('Богослужение удалено!');
             deleteServiceModal.hide();
