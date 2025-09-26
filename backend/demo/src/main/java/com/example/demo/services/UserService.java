@@ -22,8 +22,8 @@ public class UserService {
      * Получить пользователя по логину (username).
      */
     @Transactional(readOnly = true)
-    public Optional<User> getByLogin(@NonNull String login) {
-        return userRepository.findByUsername(login);
+    public Optional<User> getByLogin(@NonNull String username) {
+        return userRepository.findByUsername(username);
     }
 
     /**
