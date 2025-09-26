@@ -5,6 +5,7 @@ import com.example.demo.services.WorshipScheduleService;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +20,7 @@ public class ScheduleController {
     @Autowired
     private WorshipScheduleService service;
 
-    // Под вопросом? Нужен ли вообще html, когда можно тянуть с базы.
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/upload")
     public ResponseEntity<?> uploadSchedule(@RequestParam("file") MultipartFile file) {
         try {
@@ -82,6 +83,7 @@ public class ScheduleController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> editSchedule(@PathVariable Long id, @RequestBody WorshipSchedule updated) {
         Optional<WorshipSchedule> schedule = service.updateSchedule(id, updated.getContent());
@@ -89,6 +91,7 @@ public class ScheduleController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSchedule(@PathVariable Long id) {
         service.deleteSchedule(id);

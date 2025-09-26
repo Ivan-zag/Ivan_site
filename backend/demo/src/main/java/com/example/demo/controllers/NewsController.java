@@ -3,6 +3,8 @@ package com.example.demo.controllers;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import com.example.demo.models.*;
 import com.example.demo.services.*;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ public class NewsController {
         this.minioService = minioService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<NewsDto> createNews(@RequestParam String title,
             @RequestParam String content,
@@ -45,6 +48,7 @@ public class NewsController {
         return ResponseEntity.ok(activeNews);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<NewsDto> updateNews(
             @PathVariable Long id,
@@ -72,6 +76,7 @@ public class NewsController {
         return ResponseEntity.ok(updatedNews);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
         newsService.deleteNews(id);
