@@ -25,10 +25,28 @@ public class JwtFilter extends GenericFilterBean {
 
     private final JwtProvider jwtProvider;
 
+    private static final String[] PUBLIC_PATHS = {
+            "/api/login",
+            "/api/register",
+            "/api/token",
+            "/api/refresh"
+    };
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain fc)
             throws IOException, ServletException {
-        final String token = getTokenFromRequest((HttpServletRequest) request);
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String path = httpRequest.getServletPath();
+
+        // Пропускаем фильтр для публичных эндпоинтов
+        for (String pub : PUBLIC_PATHS) {
+            if (path.equals(pub)) {
+                fc.doFilter(request, response);
+                return;
+            }
+        }
+
+        final String token = getTokenFromRequest(httpRequest);
         if (token != null && jwtProvider.validateAccessToken(token)) {
             final Claims claims = jwtProvider.getAccessClaims(token);
             final JwtAuthentication jwtInfoToken = JwtUtils.generate(claims);

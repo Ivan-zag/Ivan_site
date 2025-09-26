@@ -31,14 +31,15 @@ public class SecurityConfig {
         http
                 .httpBasic(basic -> basic.disable())
                 .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable()) // <-- обязательно!
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Доступ для всех к GET запросам на /api/news и /api/schedule/last
                         .requestMatchers(HttpMethod.GET, "/api/news", "/api/schedule/last").permitAll()
-                        .requestMatchers("/api/login", "/api/register", "/api/public/**").permitAll()
+                        .requestMatchers("/api/login", "/api/register", "/api/public/**", "/api/token", "/api/refresh")
+                        .permitAll()
                         .anyRequest().authenticated());
         http.addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
+
 }
