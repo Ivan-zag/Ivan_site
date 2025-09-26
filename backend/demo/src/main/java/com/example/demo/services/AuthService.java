@@ -6,7 +6,10 @@ import lombok.RequiredArgsConstructor;
 import com.example.demo.JWT.*;
 import com.example.demo.models.*;
 import com.example.demo.exception.AuthException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +18,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthService {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private final UserService userService;
     private final Map<String, String> refreshStorage = new HashMap<>();
     private final JwtProvider jwtProvider;
@@ -22,7 +28,7 @@ public class AuthService {
     public JwtResponse login(@NonNull JwtRequest authRequest) {
         final User user = userService.getByLogin(authRequest.getUsername())
                 .orElseThrow(() -> new AuthException("Пользователь не найден"));
-        if (user.getPassword().equals(authRequest.getPassword())) {
+        if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
             final String refreshToken = jwtProvider.generateRefreshToken(user);
             refreshStorage.put(user.getUsername(), refreshToken);
