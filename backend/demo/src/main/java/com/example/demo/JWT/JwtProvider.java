@@ -38,7 +38,6 @@ public class JwtProvider {
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)
                 .claim("roles", user.getRole())
-                .claim("firstName", user.getFirstName())
                 .compact();
     }
 

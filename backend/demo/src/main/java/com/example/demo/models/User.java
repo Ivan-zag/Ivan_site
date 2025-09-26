@@ -22,11 +22,6 @@ public class User {
     @Column(nullable = false)
     private String password; // захешированный пароль
 
-    @Column(nullable = false)
-    private String firstName;
-    @Column(nullable = false)
-    private String lastName;
-
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Role role;
