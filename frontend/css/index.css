@@ -11,5 +11,27 @@
     }
     .container .row > .col-md-3{
         order: 3;
-    }
+    }    
 }
+
+.italic-blessing {
+    font-style: italic;
+    font-size: 1.2em;
+    font-family: 'Cinzel', 'Cardo', Georgia, serif;
+    color: #222;
+    text-align: justify; /* Добавлено выравнивание по ширине */
+    background: #f8f9fa;
+    border-left: 4px solid #b1a7f2;
+}
+.blessing-highlight {
+    background: #ffe9a7;
+    border-radius: 0.3em;
+    padding: 0 0.3em;
+    font-weight: bold;
+}
+figcaption.blockquote-footer {
+    white-space: nowrap;
+}
+
+
+
