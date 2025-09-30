@@ -45,14 +45,12 @@ $('#loginForm').on('submit', function(e) {
         data: JSON.stringify({ username: login, password: pass }),
         success: function(response) {
             // Если сервер возвращает JWT-токен:
-            if (response && response.token) {
-                // Сохраняем токен (можно в localStorage)
-                localStorage.setItem('authToken', response.token);
-                // Редиректим в админку (замени path если нужно)
-                window.location.href = "/admin.html";
-            } else {
-                $('#loginError').text('Ошибка: неверный формат ответа.').show();
-            }
+             if (response && response.accessToken) {
+        localStorage.setItem('authToken', response.accessToken);
+        window.location.href = "/admin.html";
+    } else {
+        $('#loginError').text('Ошибка: неверный формат ответа.').show();
+    }
         },
         error: function(xhr) {
             let msg = 'Ошибка входа';
