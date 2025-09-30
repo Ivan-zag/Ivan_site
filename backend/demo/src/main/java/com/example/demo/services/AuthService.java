@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.io.Decoders;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.JWT.*;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
+import javax.crypto.SecretKey;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,10 @@ public class AuthService {
         if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
             final String refreshToken = jwtProvider.generateRefreshToken(user);
+            // Проверка валидности только что сгенерированного accessToken
+            if (!jwtProvider.validateAccessToken(accessToken)) {
+                throw new AuthException("Ошибка генерации JWT токена!");
+            }
             refreshStorage.put(user.getUsername(), refreshToken);
             return new JwtResponse(accessToken, refreshToken);
         } else {
