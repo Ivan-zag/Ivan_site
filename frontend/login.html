@@ -26,6 +26,13 @@
             </div>
             <div class="mb-3 text-danger" id="loginError" style="display:none"></div>
             <button type="submit" class="btn btn-outline-secondary w-100">Войти</button>
+            <button type="submit" class="btn btn-outline-secondary w-100">Войти</button>
+<div class="text-center" id="progressBar" style="display:none">
+    <div class="spinner-border text-secondary" role="status" style="width:2rem; height:2rem;">
+      <span class="visually-hidden">Загрузка...</span>
+    </div>
+</div>
+
         </form>
     </div>
 </div>
@@ -37,29 +44,37 @@ $('#loginForm').on('submit', function(e) {
     var login = $('#username').val();
     var pass = $('#password').val();
 
-    // При необходимости добавь свой endpoint!
+    // Блокируем поля и кнопку и показываем спиннер
+    $('#username, #password, button[type="submit"]').attr('disabled', true);
+    $('#loginError').hide();
+    $('#progressBar').show();
+
     $.ajax({
         url: 'https://back.hram48plosk.ru/api/login',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ username: login, password: pass }),
         success: function(response) {
-            // Если сервер возвращает JWT-токен:
-             if (response && response.accessToken) {
-        localStorage.setItem('authToken', response.accessToken);
-        window.location.href = "/admin.html";
-    } else {
-        $('#loginError').text('Ошибка: неверный формат ответа.').show();
-    }
+            if (response && response.accessToken) {
+                localStorage.setItem('authToken', response.accessToken);
+                window.location.href = "/admin.html";
+            } else {
+                $('#loginError').text('Ошибка: неверный формат ответа.').show();
+            }
         },
         error: function(xhr) {
             let msg = 'Ошибка входа';
             if(xhr.responseJSON && xhr.responseJSON.message)
                 msg = xhr.responseJSON.message;
             $('#loginError').text(msg).show();
+        },
+        complete: function() {
+            $('#username, #password, button[type="submit"]').attr('disabled', false);
+            $('#progressBar').hide();
         }
     });
 });
+
 </script>
 </body>
 </html>
