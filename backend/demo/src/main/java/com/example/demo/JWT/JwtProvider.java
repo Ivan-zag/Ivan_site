@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 
 import javax.crypto.SecretKey;
 
@@ -39,7 +38,7 @@ public class JwtProvider {
                 .setSubject(user.getUsername())
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)
-                .claim("roles", List.of(user.getRole().toString()))
+                .claim("role", user.getRole().toString())
                 .compact();
     }
 

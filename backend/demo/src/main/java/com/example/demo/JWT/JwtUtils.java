@@ -4,10 +4,7 @@ import io.jsonwebtoken.Claims;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import com.example.demo.models.*;
-
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JwtUtils {
@@ -21,10 +18,10 @@ public final class JwtUtils {
     }
 
     private static Set<Role> getRoles(Claims claims) {
-        final List<String> roles = claims.get("roles", List.class);
-        return roles.stream()
-                .map(Role::valueOf)
-                .collect(Collectors.toSet());
+        String role = claims.get("role", String.class);
+        if (role == null)
+            return Set.of();
+        return Set.of(Role.valueOf(role));
     }
 
 }
