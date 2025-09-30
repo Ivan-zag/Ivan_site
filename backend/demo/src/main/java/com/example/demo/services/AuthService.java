@@ -1,21 +1,17 @@
 package com.example.demo.services;
 
-import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.io.Decoders;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.JWT.*;
 import com.example.demo.models.*;
 import com.example.demo.exception.AuthException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
-import javax.crypto.SecretKey;
 
 @Service
 @RequiredArgsConstructor
