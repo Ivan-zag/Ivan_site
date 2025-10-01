@@ -194,11 +194,52 @@ $(function() {
     $('#navbar-container').load('navbar.html');
 
     // Проверка наличия токена
-    const token = localStorage.getItem('authToken'); // или sessionStorage, в зависимости от потребностей
-    if (!token) {
-        // Если токена нет, перенаправляем на страницу входа
+    if (!localStorage.getItem('authToken')) {
         window.location.href = '/login.html';
         return;
+    }
+
+    // Функция-обёртка для всех защищённых запросов с поддержкой refresh токена
+    function apiRequest(opts) {
+        const accessToken = localStorage.getItem('authToken');
+        const refreshToken = localStorage.getItem('refreshToken');
+        opts.headers = opts.headers || {};
+        opts.headers['Authorization'] = 'Bearer ' + accessToken;
+
+        var origError = opts.error;
+        opts.error = function(xhr) {
+            if (xhr.status === 401 || xhr.status === 403) {
+                // Пытаемся обновить token
+                if (!refreshToken) {
+                    window.location.href = "/login.html";
+                    return;
+                }
+                $.ajax({
+                    url: 'https://back.hram48plosk.ru/api/token',
+                    type: 'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify({ refreshToken: refreshToken }),
+                    success: function(res) {
+                        if(res.accessToken) {
+                            localStorage.setItem('authToken', res.accessToken);
+                            if(res.refreshToken)
+                                localStorage.setItem('refreshToken', res.refreshToken);
+                            // повторяем оригинальный запрос с новым токеном
+                            opts.headers['Authorization'] = 'Bearer ' + res.accessToken;
+                            $.ajax(opts);
+                        } else {
+                            window.location.href = "/login.html";
+                        }
+                    },
+                    error: function() {
+                        window.location.href = "/login.html";
+                    }
+                });
+            } else if(origError) {
+                origError(xhr);
+            }
+        };
+        $.ajax(opts);
     }
 
     var newsList = [], serviceList = [];
@@ -224,12 +265,9 @@ $(function() {
     $('#newsForm').on('submit', function(e){
         e.preventDefault();
         var fd = new FormData(this);
-        $.ajax({
+        apiRequest({
             url: 'https://back.hram48plosk.ru/api/news',
             type: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + token  // передача токена
-            },
             data: fd,
             processData: false,
             contentType: false,
@@ -239,12 +277,16 @@ $(function() {
     });
 
     $('#editNewsBtn').click(function(){
-        $.get('https://back.hram48plosk.ru/api/news', function(data){
-            newsList = data || [];
-            var $s = $('#editNewsSelect').empty();
-            newsList.forEach(x => $s.append($('<option>').val(x.id).text(x.title)));
-            if(newsList.length) $s.val(newsList[0].id).trigger('change');
-            editNewsModal.show();
+        apiRequest({
+            url: 'https://back.hram48plosk.ru/api/news',
+            type: 'GET',
+            success: function(data){
+                newsList = data || [];
+                var $s = $('#editNewsSelect').empty();
+                newsList.forEach(x => $s.append($('<option>').val(x.id).text(x.title)));
+                if(newsList.length) $s.val(newsList[0].id).trigger('change');
+                editNewsModal.show();
+            }
         });
     });
     $('#editNewsSelect').on('change', function(){
@@ -256,53 +298,48 @@ $(function() {
         $('#editNewsImageInput').val('');
     });
     $('#editNewsForm').on('submit', function(e){
-    e.preventDefault();
-    var id = $('#editNewsSelect').val();
-    var n = newsList.find(x => x.id == id);
-    var fd = new FormData();
-    fd.append('title', $('#editNewsTitle').val());
-    fd.append('content', $('#editNewsContent').val());
+        e.preventDefault();
+        var id = $('#editNewsSelect').val();
+        var n = newsList.find(x => x.id == id);
+        var fd = new FormData();
+        fd.append('title', $('#editNewsTitle').val());
+        fd.append('content', $('#editNewsContent').val());
+        var selectedFile = $('#editNewsImageInput')[0].files[0];
+        if (selectedFile) {
+            fd.append('imageUrl', selectedFile);
+        }
 
-    // Добавляем файл только если выбран!
-    var selectedFile = $('#editNewsImageInput')[0].files[0];
-    if (selectedFile) {
-        fd.append('imageUrl', selectedFile);
-    }
-
-    $.ajax({
-        url:'https://back.hram48plosk.ru/api/news/' + id,
-        type:'PUT',
-        headers: {
-                'Authorization': 'Bearer ' + token  // передача токена
-            },
-        data: fd,
-        processData: false,
-        contentType: false,
-        success: function(){ alert('Сохранено!'); editNewsModal.hide(); },
-        error: function(){ alert('Ошибка!'); }
+        apiRequest({
+            url: 'https://back.hram48plosk.ru/api/news/' + id,
+            type:'PUT',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(){ alert('Сохранено!'); editNewsModal.hide(); },
+            error: function(){ alert('Ошибка!'); }
+        });
     });
-});
-
 
     $('#deleteNewsBtn').click(function(){
-        $.get('https://back.hram48plosk.ru/api/news', function(data){
-            newsList = data || [];
-            var $s = $('#newsToDelete').empty();
-            newsList.forEach(x => $s.append($('<option>').val(x.id).text(x.title)));
-            deleteNewsModal.show();
+        apiRequest({
+            url: 'https://back.hram48plosk.ru/api/news',
+            type: 'GET',
+            success: function(data){
+                newsList = data || [];
+                var $s = $('#newsToDelete').empty();
+                newsList.forEach(x => $s.append($('<option>').val(x.id).text(x.title)));
+                deleteNewsModal.show();
+            }
         });
     });
     $('#deleteNewsForm').on('submit', function(e){
         e.preventDefault();
         var id = $('#newsToDelete').val();
-        $.ajax({
-            url:'https://back.hram48plosk.ru/api/news/'+id,
-            headers: {
-                'Authorization': 'Bearer ' + token  // передача токена
-            },
+        apiRequest({
+            url: 'https://back.hram48plosk.ru/api/news/' + id,
             type:'DELETE',
             success: function(){ alert('Удалено!'); deleteNewsModal.hide(); },
-            error:function(){ alert('Ошибка!'); }
+            error: function(){ alert('Ошибка!'); }
         });
     });
 
@@ -312,12 +349,9 @@ $(function() {
     $('#serviceForm').on('submit', function(e){
         e.preventDefault();
         var fd = new FormData(this);
-        $.ajax({
+        apiRequest({
             url: 'https://back.hram48plosk.ru/api/schedule/upload',
             type: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + token  // передача токена
-            },
             data: fd,
             processData: false,
             contentType: false,
@@ -326,36 +360,33 @@ $(function() {
         });
     });
 
-    var lastServiceId; // Объявление переменной для хранения ID последнего богослужения
-
-$('#deleteServiceBtn').click(function(){
-    $.get('https://back.hram48plosk.ru/api/schedule/last', function(data){
-        lastServiceId = data.id; // Сохраняем ID последнего богослужения
-        if (confirm(`Вы уверены, что хотите удалить богослужение с ID ${lastServiceId}?`)) {
-            deleteService(lastServiceId);
-        }
+    var lastServiceId;
+    $('#deleteServiceBtn').click(function(){
+        apiRequest({
+            url: 'https://back.hram48plosk.ru/api/schedule/last',
+            type: 'GET',
+            success: function(data){
+                lastServiceId = data.id;
+                if (confirm(`Вы уверены, что хотите удалить богослужение с ID ${lastServiceId}?`)) {
+                    deleteService(lastServiceId);
+                }
+            }
+        });
     });
-});
 
-// Функция для удаления богослужения
-function deleteService(id) {
-    $.ajax({
-        url: 'https://back.hram48plosk.ru/api/schedule/' + id,
-        type: 'DELETE',
-        headers: {
-                'Authorization': 'Bearer ' + token  // передача токена
+    function deleteService(id) {
+        apiRequest({
+            url: 'https://back.hram48plosk.ru/api/schedule/' + id,
+            type: 'DELETE',
+            success: function(){
+                alert('Богослужение удалено!');
+                deleteServiceModal.hide();
             },
-        success: function(){
-            alert('Богослужение удалено!');
-            deleteServiceModal.hide();
-            // Обновление интерфейса, например: обновить список богослужений или скрыть удалённое
-        },
-        error: function(){
-            alert('Ошибка при удалении богослужения!');
-        }
-    });
-}
-
+            error: function(){
+                alert('Ошибка при удалении богослужения!');
+            }
+        });
+    }
 });
 </script>
 </body>
