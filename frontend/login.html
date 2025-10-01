@@ -57,6 +57,7 @@ $('#loginForm').on('submit', function(e) {
         success: function(response) {
             if (response && response.accessToken) {
                 localStorage.setItem('authToken', response.accessToken);
+                localStorage.setItem('refreshToken', response.refreshToken);
                 window.location.href = "/admin.html";
             } else {
                 $('#loginError').text('Ошибка: неверный формат ответа.').show();
